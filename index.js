@@ -1,37 +1,50 @@
-var app = require('express')();
-var http = require('http').Server(app);
-var io = require('socket.io')(http);
+'use strict';
 
+const app = require('express')();
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
+const mongoose = require('mongoose');
 
+const Questions = require('./models/questions.js');
 
-let MSGS = [
-  {
-    msg: 'test',
-    votes: 2
-  }, 
-  {
-    msg: 'help',
-    votes: 4
-  }
-  ];
+mongoose.connect('mongodb://localhost:27017/qlaunch');
 
 io.on('connection', function(socket){
-  socket.emit('msgs', {msgs: MSGS});
-
-  socket.on('send-msg', (msg) => {
-    console.log('msg received')
-    MSGS.push(msg);
-    MSGS.sort((a, b) => {
-      return b.votes - a.votes;
+  Questions.find({})
+    .then(data => {
+      console.log('initial load', data);
+      data.sort((a, b) => {
+        return b.votes - a.votes;
+      });
+      console.log('sorted', data);
+      return data;
     })
-    io.emit('msgs', {msgs: MSGS});
+    .then(data => {
+      socket.emit('send-all-questions', data);
+    });
+  
+  socket.on('send-question', question => {
+    console.log('B1. question received');
+
+    Questions.create(question)
+      .then(() => {
+        return Questions.find({});
+      })
+      .then(questions => {
+        console.log('B2. created questions from db', questions);
+        questions.sort((a, b) => {
+          return b.votes - a.votes;
+        });
+        console.log('B3. sorted questions from db', questions);
+        return questions;
+      })
+      .then(questions => {
+        console.log('B4. questions before sending sorted questions', questions);
+        io.emit('send-all-questions', questions);
+      });
   });
+
 });
-
-
-const Bundler = require('parcel-bundler');
-let bundler = new Bundler('./public/index.html');
-app.use(bundler.middleware());
 
 http.listen(3000, function(){
   console.log('listening on *:3000');
