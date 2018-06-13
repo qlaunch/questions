@@ -8,7 +8,7 @@ const config = {
   devServer: {
     headers: {'Access-Control-Allow-Origin': '*'}
   },
-  entry: `${__dirname}/src/app.jsx`,
+  entry: `${__dirname}/src/components/App.jsx`,
   output: {
     path: `${__dirname}/public`,
     filename: 'bundle.js'
@@ -19,7 +19,7 @@ const config = {
   module: { 
     rules: [
       {
-        test: /\.jsx?$/, loader: ['babel-loader'], exclude: /node_modules/
+        test: /\.(jsx|js)$/, loader: ['babel-loader'], exclude: /node_modules/
       },
       {
         test: /\.(scss|css)$/,

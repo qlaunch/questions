@@ -1,26 +1,45 @@
-import React, {Component, Fragment} from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
 
 import io from 'socket.io-client';
 
-const socket = io('http://localhost:3000');
+import Room from './Room.jsx';
+
+const socket = io('http://localhost:8000');
 socket.on('connect', () => {
   console.log('client connected!');
 })
 
-class App extends Component {
+class App extends React.Component {
   state = {
-    room: null,
-    data: []
-  }
+    roomID: null,
+    data: [],
+    roomsList: [],
+  };
 
   componentDidMount() {
-    socket.on('send-all-questions', data => {
-      console.log('A1. client got questions', data);
-      this.setState({data: data});
-      console.log('A2. inital state after load', this.state);
-    })
-  }
+    socket.on('send-all-rooms', rooms => {
+      console.log('rooms: ', rooms);
+      this.setState({roomsList: rooms});
+      console.log('rooms state: ', this.state);
+    });
+    socket.emit('first-load-get-rooms', {
+       
+    });
+    socket.on('new-room-added', addedRoom => {
+      console.log('addedRoom: ', addedRoom);
+      this.state.roomsList.push(addedRoom);
+      this.setState({roomsList: this.state.roomsList});
+    });
+  };
+
+  // componentDidMount() {
+  //   socket.on('send-all-questions', data => {
+  //     console.log('A1. client got questions', data);
+  //     this.setState({data: data});
+  //     console.log('A2. inital state after load', this.state);
+  //   })
+  // }
   
 
   sendQuestion = (ev) => {
@@ -30,7 +49,7 @@ class App extends Component {
       text: ev.target.question.value, 
       votes: 0,
       room: this.state.room
-    }
+    };
     console.log('sending this question', ev.target.question.value);
     ev.preventDefault();
     if(ev.target.question.value !== ''){
@@ -41,10 +60,10 @@ class App extends Component {
 
   createRoom = ev => {
     ev.preventDefault();
-    let room = ev.target.room.value;
-    this.setState({room: room});
-    socket.emit('create-room', room);
-    console.log('joining room', room);
+    let targetName = ev.target.room.value;
+    console.log('targetName: ', targetName);
+    this.setState({room: targetName});
+    socket.emit('create-room', {name: targetName});
     ev.target.reset();
   };
   
@@ -54,10 +73,15 @@ class App extends Component {
     console.log('vote: ', ev.target.id);
   };
 
+  joinRoom = (id) => {
+    this.setState({roomID: id})
+    
+  };
+
 
   render() {
     console.log('R1. render questions', this.state.data);
-    return <Fragment>
+    return <React.Fragment>
       <h1>qLaunch</h1>
       
       <form onSubmit={this.createRoom} name="form">
@@ -80,7 +104,20 @@ class App extends Component {
         <input size="50" name="question" placeholder="Question..."/>
         <input type="submit" value="Send Question" />
       </form>
-    </Fragment>
+
+      <div>
+        {this.state.roomsList.map((roomItem) => {
+          return (
+          <div key={roomItem._id}>
+          {roomItem._id}{' (DELETE roomItem._id LATER) '}
+            Room: {roomItem.name}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button onClick={() => this.joinRoom(roomItem._id)}>Join Room</button>
+          </div>
+          )
+        })}
+        {this.state.roomID !==null && <Room  />}
+      </div>
+    </React.Fragment>
   }
 }
 

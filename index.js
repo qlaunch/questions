@@ -1,11 +1,12 @@
 'use strict';
 
-const app = require('express')();
-const http = require('http').Server(app);
+const App = require('express')();
+const http = require('http').Server(App);
 const io = require('socket.io')(http);
 const mongoose = require('mongoose');
 
 const Questions = require('./models/questions.js');
+const Room = require('./models/room');
 
 mongoose.connect('mongodb://localhost:27017/qlaunch');
 
@@ -50,10 +51,8 @@ io.on('connection', function(socket){
     Questions.find({_id: id.id})
       .then(question => {
         console.log('question: ', question[0].votes);
-        let votes = question[0].votes;
-        votes = ++votes;
-        console.log('votes: ', votes);
-        question[0].votes = votes;
+        // ++question[0].votes;
+        question[0].votes += 1;
         question[0].save((error) => {
           if (error) {
             console.error('error: ', error);
@@ -73,20 +72,40 @@ io.on('connection', function(socket){
       });
   });
 
-  socket.on('create-room', room => {
-    console.log('user created/joined room');
-    socket.join(room);//
-
-    Questions.find({room: room})
-      .then(questions => {
-        questions.sort((a, b) => {
-          return b.votes - a.votes;
-        });
-        return questions;
+  socket.on('first-load-get-rooms', rooms => {
+    console.log('Initial Get Hit: ', rooms);
+    Room.find()
+      .then((rooms) => {
+        console.log('Rooms Retrieved: ', rooms);
+        return rooms;
       })
-      .then(questions => {
-        socket.emit('send-all-questions', questions);
+      .then((rooms) => {
+        socket.emit('send-all-rooms', rooms);
       });
+  });
+
+  socket.on('create-room', room => {
+    console.log('Create Hit: ', room);
+    Room.create(room)
+      .then((databaseRoom) => {
+        console.log('databaseRoom: ', databaseRoom);
+        io.emit('new-room-added', databaseRoom);
+      })
+      .catch((error) => {
+        console.error('error: ', error);
+      });
+    // socket.join(room);//
+
+    // Questions.find({room: room})
+    //   .then(questions => {
+    //     questions.sort((a, b) => {
+    //       return b.votes - a.votes;
+    //     });
+    //     return questions;
+    //   })
+    //   .then(questions => {
+    //     socket.emit('send-all-questions', questions);
+    //   });
   });
 
 });
