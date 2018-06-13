@@ -44,9 +44,38 @@ io.on('connection', function(socket){
       });
   });
 
+  socket.on('vote', id => {
+    console.log('user added a vote ', id);
+
+    Questions.find({_id: id.id})
+      .then(question => {
+        console.log('question: ', question[0].votes);
+        let votes = question[0].votes;
+        votes = ++votes;
+        console.log('votes: ', votes);
+        question[0].votes = votes;
+        question[0].save((error) => {
+          if (error) {
+            console.error('error: ', error);
+          }
+        });
+      });
+    Questions.find({room: id.room})
+      .then(questions => {
+        console.log('hit me!');
+        questions.sort((a, b) => {
+          return b.votes - a.votes;
+        });
+        return questions;
+      })
+      .then(questions => {
+        io.to(id.room).emit(questions);
+      });
+  });
+
   socket.on('create-room', room => {
     console.log('user created/joined room');
-    socket.join(room);
+    socket.join(room);//
 
     Questions.find({room: room})
       .then(questions => {
@@ -62,6 +91,6 @@ io.on('connection', function(socket){
 
 });
 
-http.listen(3000, function(){
-  console.log('listening on http://localhost:3000');
+http.listen(8000, function(){
+  console.log('listening on http://localhost:8000');
 });
