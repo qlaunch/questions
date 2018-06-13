@@ -45,9 +45,15 @@ class App extends Component {
     this.setState({room: room});
     socket.emit('create-room', room);
     console.log('joining room', room);
-  }
+    ev.target.reset();
+  };
   
-  
+  vote = (ev) => {
+    ev.preventDefault();
+    socket.emit('vote', {id: ev.target.id, room: this.state.room});
+    console.log('vote: ', ev.target.id);
+  };
+
 
   render() {
     console.log('R1. render questions', this.state.data);
@@ -62,9 +68,12 @@ class App extends Component {
       <ul>
         {this.state.data.map((item, index) => {
           console.log('R2. Current Items', item, index);
-          return <li key={index}>{item.text} has {item.votes} votes</li>
+          return <li key={index}>
+          <span> {item.votes} votes </span>
+          <span>{item.text}</span>
+          <span name='likes' id={item._id} onClick={this.vote}> Like </span>
+          </li>
         })}
-
       </ul>
 
       <form onSubmit={this.sendQuestion} name="form">
