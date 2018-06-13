@@ -10,6 +10,7 @@ socket.on('connect', () => {
 
 class App extends Component {
   state = {
+    room: null,
     data: []
   }
 
@@ -25,14 +26,26 @@ class App extends Component {
   sendQuestion = (ev) => {
     console.log('sending this question', ev.target.question.value);
     ev.preventDefault();
-    let newEntry = {text: ev.target.question.value, votes: 0}
+    let newEntry = {
+      text: ev.target.question.value, 
+      votes: 0,
+      room: this.state.room
+    }
     console.log('sending this question', ev.target.question.value);
     ev.preventDefault();
-    if(ev.target.question.value){
+    if(ev.target.question.value !== ''){
     socket.emit('send-question', newEntry);
     }
     ev.target.reset();
   };
+
+  createRoom = ev => {
+    ev.preventDefault();
+    let room = ev.target.room.value;
+    this.setState({room: room});
+    socket.emit('create-room', room);
+    console.log('joining room', room);
+  }
   
   
 
@@ -41,6 +54,11 @@ class App extends Component {
     return <Fragment>
       <h1>qLaunch</h1>
       
+      <form onSubmit={this.createRoom} name="form">
+        <input size="50" name="room" placeholder="Room Name..."/>
+        <input type="submit" value="join/create" />
+      </form>
+
       <ul>
         {this.state.data.map((item, index) => {
           console.log('R2. Current Items', item, index);
