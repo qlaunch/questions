@@ -62,14 +62,15 @@ io.on('connection', function(socket){
       });
     Questions.find({room: id.room})
       .then(questions => {
-        console.log('hit me!');
+        
         questions.sort((a, b) => {
           return b.votes - a.votes;
         });
         return questions;
       })
       .then(questions => {
-        io.to(id.room).emit(questions);
+        console.log('hit me!', questions);
+        io.to(id.room).emit('send-all-questions', questions);
       });
   });
 
@@ -91,6 +92,6 @@ io.on('connection', function(socket){
 
 });
 
-http.listen(8000, function(){
-  console.log('listening on http://localhost:8000');
+http.listen(3000, function(){
+  console.log('listening on http://localhost:3000');
 });
