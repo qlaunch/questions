@@ -33,33 +33,33 @@ io.on('connection', function(socket){
   });
 
   socket.on('vote', id => {
-    console.log('user added a vote ', id);
+    console.log('1 server vote')
 
     Questions.find({_id: id.id})
-      .then(question => {
-        console.log('question: ', question[0].votes);
-        let votes = question[0].votes;
-        votes = ++votes;
-        console.log('votes: ', votes);
-        question[0].votes = votes;
-        question[0].save((error) => {
-          if (error) {
-            console.error('error: ', error);
-          }
+    .then(question => {
+      console.log('2 found vote')
+      let votes = question[0].votes;
+      votes = ++votes;
+      
+      question[0].votes = votes;
+      return question[0].save((error) => {
+        if (error) {
+          console.error('error: ', error);
+        }
+        return Questions.find({room: id.room})
+        .then(questions => {
+          
+          questions.sort((a, b) => {
+            return b.votes - a.votes;
+          });
+          return questions;
+        })
+        .then(questions => {
+          console.log('emitting vote', questions)
+          io.to(id.room).emit('send-all-questions', questions);
         });
       });
-    Questions.find({room: id.room})
-      .then(questions => {
-        
-        questions.sort((a, b) => {
-          return b.votes - a.votes;
-        });
-        return questions;
-      })
-      .then(questions => {
-        console.log('hit me!', questions);
-        io.to(id.room).emit('send-all-questions', questions);
-      });
+    });
   });
 
   socket.on('create-room', room => {
