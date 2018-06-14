@@ -16,7 +16,7 @@ class App extends Component {
 
   componentDidMount() {
     socket.on('send-all-questions', data => {
-      console.log('getting data')
+      console.log('getting data', data)
       this.setState({data: data});
     })
   }
