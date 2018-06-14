@@ -2,6 +2,7 @@ import React, {Component, Fragment} from 'react';
 import ReactDOM from 'react-dom';
 
 import io from 'socket.io-client';
+import ReactSwipe from 'react-swipe';
 
 const socket = io('http://localhost:3000');
 socket.on('connect', () => {
@@ -12,7 +13,8 @@ class App extends Component {
   state = {
     rooms: [],
     room: null,
-    data: []
+    data: [],
+    view: true
   }
 
   componentDidMount() {
@@ -60,6 +62,7 @@ class App extends Component {
     this.setState({room: room});
     socket.emit('create-room', room);
     ev.target.reset();
+    this.next()
   };
   
   vote = (ev) => {
@@ -68,6 +71,20 @@ class App extends Component {
     socket.emit('vote', {id: ev.target.id, room: this.state.room});
     
   };
+
+  next() {
+    if(this.state === false){
+    this.setState({view: true})
+    }else{
+      this.setState({view: false})
+    }
+    this.reactSwipe.next();
+  }
+
+  prev() {
+    this.reactSwipe.prev();
+  }
+
   join = ev => {
     console.log('joining room', ev.target.id)
     ev.preventDefault();
@@ -77,6 +94,7 @@ class App extends Component {
       socket.emit('join', {enter: ev.target.id, exit: this.state.room})
     }
     this.setState({room: ev.target.id})
+    this.next()
   }
   
 
@@ -85,36 +103,47 @@ class App extends Component {
     
     return <Fragment>
       <h1>qLaunch</h1>
-      
-      <form onSubmit={this.createRoom} name="form">
-        <input size="50" name="room" placeholder="Room Name..."/>
-        <input type="submit" value="join/create" />
-      </form>
-      <ul> List of Chat Rooms Available
-        {this.state.rooms.map((room, index) => {
-          if(room !== this.state.room){
-          return <li key={index}>
-            <span> {room} </span>
-            <span name='room' id={room} onClick={this.join}> Join </span>
-          </li>
-          }
-        })}
-      </ul>
-      <ul>
-        {this.state.data.map((item, index) => {
+        <ReactSwipe ref={reactSwipe => this.reactSwipe = reactSwipe} className="mySwipe">
+          <div> Host an Event
+              <form onSubmit={this.createRoom} name="form">
+                <input size="50" name="room" placeholder="Room Name..."/>
+                <input type="submit" value="join/create" />
+              </form>
+              <ul> List of Chat Rooms Available
+                {this.state.rooms.map((room, index) => {
+                  if(room !== this.state.room){
+                  return <li key={index}>
+                    <span> {room} </span>
+                    <span name='room' id={room} onClick={this.join}> Join </span>
+                  </li>
+                  }
+                })}
+              </ul>
+            
+          </div>
+          <div> Questions
           
-          return <li key={index}>
-          <span> {item.votes} votes </span>
-          <span>{item.text}</span>
-          <span name='likes' id={item._id} onClick={this.vote}> Like </span>
-          </li>
-        })}
-      </ul>
+            <ul>
+              {this.state.data.map((item, index) => {
+                
+                return <li key={index}>
+                <span> {item.votes} votes </span>
+                <span>{item.text}</span>
+                <span name='likes' id={item._id} onClick={this.vote}> Like </span>
+                </li>
+              })}
+            </ul>
 
-      <form onSubmit={this.sendQuestion} name="form">
-        <input size="50" name="question" placeholder="Question..."/>
-        <input type="submit" value="Send Question" />
-      </form>
+            <form onSubmit={this.sendQuestion} name="form">
+              <input size="50" name="question" placeholder="Question..."/>
+              <input type="submit" value="Send Question" />
+            </form>
+          </div>
+
+        
+      </ReactSwipe>
+      <button type="button" onClick={this.next}>Lobby</button>
+      <button type="button" onClick={this.next}>Room</button>
     </Fragment>
   }
 }
