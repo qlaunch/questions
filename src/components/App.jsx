@@ -5,7 +5,8 @@ import io from 'socket.io-client';
 
 import Room from './Room.jsx';
 
-const socket = io('http://localhost:8000');
+// const socket = io('http://localhost:8000');
+const socket = io('http://192.168.1.102:8000');
 socket.on('connect', () => {
   console.log('client connected!');
 })
@@ -13,7 +14,7 @@ socket.on('connect', () => {
 class App extends React.Component {
   state = {
     roomID: null,
-    data: [],
+    // data: [],
     roomsList: [],
   };
 
@@ -33,31 +34,6 @@ class App extends React.Component {
     });
   };
 
-  // componentDidMount() {
-  //   socket.on('send-all-questions', data => {
-  //     console.log('A1. client got questions', data);
-  //     this.setState({data: data});
-  //     console.log('A2. inital state after load', this.state);
-  //   })
-  // }
-  
-
-  sendQuestion = (ev) => {
-    console.log('sending this question', ev.target.question.value);
-    ev.preventDefault();
-    let newEntry = {
-      text: ev.target.question.value, 
-      votes: 0,
-      room: this.state.room
-    };
-    console.log('sending this question', ev.target.question.value);
-    ev.preventDefault();
-    if(ev.target.question.value !== ''){
-    socket.emit('send-question', newEntry);
-    }
-    ev.target.reset();
-  };
-
   createRoom = ev => {
     ev.preventDefault();
     let targetName = ev.target.room.value;
@@ -67,56 +43,42 @@ class App extends React.Component {
     ev.target.reset();
   };
   
-  vote = (ev) => {
-    ev.preventDefault();
-    socket.emit('vote', {id: ev.target.id, room: this.state.room});
-    console.log('vote: ', ev.target.id);
-  };
+  // vote = (ev) => {
+  //   ev.preventDefault();
+  //   socket.emit('vote', {id: ev.target.id, room: this.state.room});
+  //   console.log('vote: ', ev.target.id);
+  // };
 
   joinRoom = (id) => {
-    this.setState({roomID: id})
-    
+    this.setState({roomID: id});
+    socket.emit('join-room', id);//is a string ID for the room
   };
 
 
   render() {
-    console.log('R1. render questions', this.state.data);
     return <React.Fragment>
-      <h1>qLaunch</h1>
-      
-      <form onSubmit={this.createRoom} name="form">
-        <input size="50" name="room" placeholder="Room Name..."/>
-        <input type="submit" value="join/create" />
-      </form>
-
-      <ul>
-        {this.state.data.map((item, index) => {
-          console.log('R2. Current Items', item, index);
-          return <li key={index}>
-          <span> {item.votes} votes </span>
-          <span>{item.text}</span>
-          <span name='likes' id={item._id} onClick={this.vote}> Like </span>
-          </li>
-        })}
-      </ul>
-
-      <form onSubmit={this.sendQuestion} name="form">
-        <input size="50" name="question" placeholder="Question..."/>
-        <input type="submit" value="Send Question" />
-      </form>
-
+      <h1>QLaunch</h1>
+      {this.state.roomID === null &&
       <div>
-        {this.state.roomsList.map((roomItem) => {
-          return (
-          <div key={roomItem._id}>
-          {roomItem._id}{' (DELETE roomItem._id LATER) '}
-            Room: {roomItem.name}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <button onClick={() => this.joinRoom(roomItem._id)}>Join Room</button>
-          </div>
-          )
-        })}
-        {this.state.roomID !==null && <Room  />}
+        <form onSubmit={this.createRoom} name="form">
+          <input size="50" name="room" placeholder="Room Name..."/>
+          <input type="submit" value="join/create" />
+        </form>
+
+        <div>
+          {this.state.roomsList.map((roomItem) => {
+            return (
+            <div key={roomItem._id}>
+            {roomItem._id}{' (DELETE roomItem._id LATER) '}
+              Room: {roomItem.name}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <button onClick={() => this.joinRoom(roomItem._id)}>Join Room</button>
+            </div>
+            )
+          })}
+        </div>
       </div>
+      }
+      {this.state.roomID !==null && <Room socket={socket} roomID={this.state.roomID} />}
     </React.Fragment>
   }
 }

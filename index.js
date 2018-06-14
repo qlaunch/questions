@@ -10,7 +10,8 @@ const Room = require('./models/room');
 
 mongoose.connect('mongodb://localhost:27017/qlaunch');
 
-io.on('connection', function(socket){
+io.on('connection', function (socket) {
+
   // Questions.find({})
   //   .then(data => {
   //     console.log('initial load', data);
@@ -23,52 +24,77 @@ io.on('connection', function(socket){
   //   .then(data => {
   //     socket.emit('send-all-questions', data);
   //   });
-  
-  socket.on('send-question', question => {
-    console.log('B1. question received');
 
-    Questions.create(question)
-      .then(() => {
-        return Questions.find({room: question.room});
-      })
+  socket.on('join-room', roomID => {//roomID = string which is the mongo ID
+    socket.join(roomID);//socket is joined
+    console.log('joining room: ', roomID);
+    Questions.find({ room: roomID })
       .then(questions => {
-        console.log('B2. created questions from db', questions);
+        console.log('B2-join-room. created questions from db');
         questions.sort((a, b) => {
           return b.votes - a.votes;
         });
-        console.log('B3. sorted questions from db', questions);
+        console.log('B3-join-room. sorted questions from db: ', questions);
         return questions;
       })
       .then(questions => {
-        console.log('B4. questions before sending sorted questions', questions);
-        io.to(question.room).emit('send-all-questions', questions);
+        console.log('B4-join-room. questions before sending sorted questions');
+        // socket.to(question.room).emit('send-all-questions', questions);
+        io.in(roomID).emit('send-all-questions', questions);//Bug: Anytime someone joins a room, the questionList gets resent every time
+      });
+  });
+
+
+  socket.on('send-question', question => {
+    console.log('B1. question received: ', question);
+
+    Questions.create(question)
+      .then(() => {
+        return Questions.find({ room: question.room });
+      })
+      .then(questions => {
+        console.log('B2. created questions from db');
+        questions.sort((a, b) => {
+          return b.votes - a.votes;
+        });
+        console.log('B3. sorted questions from db: ', questions);
+        return questions;
+      })
+      .then(questions => {
+        console.log('B4. questions before sending sorted questions');
+        // socket.to(question.room).emit('send-all-questions', questions);
+        io.in(question.room).emit('send-all-questions', questions);
       });
   });
 
   socket.on('vote', id => {
     console.log('user added a vote ', id);
 
-    Questions.find({_id: id.id})
+    Questions.find({ _id: id.id })
       .then(question => {
-        console.log('question: ', question[0].votes);
+        console.log('question:', question[0]);
         // ++question[0].votes;
         question[0].votes += 1;
-        question[0].save((error) => {
-          if (error) {
+        return question[0].save()
+          .then(() => {
+            console.log('SAVED DAWG!: ', question[0]);
+          })
+          .catch((error) => {
             console.error('error: ', error);
-          }
-        });
-      });
-    Questions.find({room: id.room})
-      .then(questions => {
-        console.log('hit me!');
-        questions.sort((a, b) => {
-          return b.votes - a.votes;
-        });
-        return questions;
+          });
       })
-      .then(questions => {
-        io.to(id.room).emit(questions);
+      .then(() => {
+        Questions.find({ room: id.room })
+          .then(questions => {
+            console.log('questions: ', questions);
+            questions.sort((a, b) => {
+              return b.votes - a.votes;
+            });
+            return questions;
+          })
+          .then(questions => {
+            io.in(id.room).emit('send-all-questions', questions);
+          });
       });
   });
 
@@ -94,22 +120,10 @@ io.on('connection', function(socket){
       .catch((error) => {
         console.error('error: ', error);
       });
-    // socket.join(room);//
-
-    // Questions.find({room: room})
-    //   .then(questions => {
-    //     questions.sort((a, b) => {
-    //       return b.votes - a.votes;
-    //     });
-    //     return questions;
-    //   })
-    //   .then(questions => {
-    //     socket.emit('send-all-questions', questions);
-    //   });
   });
 
 });
 
-http.listen(8000, function(){
+http.listen(8000, function () {
   console.log('listening on http://localhost:8000');
 });
