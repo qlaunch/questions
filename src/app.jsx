@@ -4,20 +4,29 @@ import ReactDOM from 'react-dom';
 import io from 'socket.io-client';
 
 const socket = io('http://localhost:3000');
+
+let socketId;
 socket.on('connect', () => {
-  
+  console.log('session id', socket.id);
+  socketId = socket.id;
 })
+
 
 class App extends Component {
   state = {
     room: null,
-    data: []
+    data: [],
+    clientId: null,
   }
 
   componentDidMount() {
     socket.on('send-all-questions', data => {
       console.log('getting data', data)
-      this.setState({data: data});
+      this.setState({
+        data: data,
+        clientId: socketId
+      });
+      console.log('initial state on component mount', this.state);
     })
   }
   
@@ -49,8 +58,10 @@ class App extends Component {
   vote = (ev) => {
     console.log('voting')
     ev.preventDefault();
-    socket.emit('vote', {id: ev.target.id, room: this.state.room});
-    
+    socket.emit('vote', {
+      id: ev.target.id,
+      room: this.state.room,
+    });
   };
 
   
@@ -60,15 +71,20 @@ class App extends Component {
     
     return <Fragment>
       <h1>qLaunch</h1>
+      <h2>Room: {this.state.room}</h2>
       
       <form onSubmit={this.createRoom} name="form">
         <input size="50" name="room" placeholder="Room Name..."/>
         <input type="submit" value="join/create" />
       </form>
 
+      <form onSubmit={this.sendQuestion} name="form">
+        <input size="50" name="question" placeholder="Question..."/>
+        <input type="submit" value="Send Question" />
+      </form>
+
       <ul>
         {this.state.data.map((item, index) => {
-          
           return <li key={index}>
           <span> {item.votes} votes </span>
           <span>{item.text}</span>
@@ -76,11 +92,6 @@ class App extends Component {
           </li>
         })}
       </ul>
-
-      <form onSubmit={this.sendQuestion} name="form">
-        <input size="50" name="question" placeholder="Question..."/>
-        <input type="submit" value="Send Question" />
-      </form>
     </Fragment>
   }
 }
