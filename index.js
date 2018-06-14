@@ -10,6 +10,10 @@ const Questions = require('./models/questions.js');
 mongoose.connect('mongodb://localhost:27017/qlaunch');
 
 io.on('connection', function(socket){
+  socket.join('default')
+  socket.leave(socket.id)
+  socket.emit('rooms', Object.keys(io.sockets.adapter.rooms))
+  console.log('trying to find rooms', Object.keys(io.sockets.adapter.rooms))
   // Questions.find({})
   //   .then(data => {
   //     console.log('initial load', data);
@@ -24,8 +28,6 @@ io.on('connection', function(socket){
   //   });
   
   socket.on('send-question', question => {
-    
-
     Questions.create(question)
       .then(() => {
         return Questions.find({room: question.room});
@@ -42,6 +44,7 @@ io.on('connection', function(socket){
         
         io.to(question.room).emit('send-all-questions', questions);
       });
+      
   });
 
   socket.on('vote', id => {
@@ -88,7 +91,14 @@ io.on('connection', function(socket){
       .then(questions => {
         socket.emit('send-all-questions', questions);
       });
+      io.emit('rooms', Object.keys(io.sockets.adapter.rooms))
   });
+
+  socket.on('join', data => {
+    socket.join(data.enter);
+    socket.leave(data.exit);
+    io.emit('rooms', Object.keys(io.sockets.adapter.rooms))
+  })
 
 });
 
