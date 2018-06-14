@@ -24,35 +24,35 @@ io.on('connection', function(socket){
   //   });
   
   socket.on('send-question', question => {
-    console.log('B1. question received');
+    
 
     Questions.create(question)
       .then(() => {
         return Questions.find({room: question.room});
       })
       .then(questions => {
-        console.log('B2. created questions from db', questions);
+        
         questions.sort((a, b) => {
           return b.votes - a.votes;
         });
-        console.log('B3. sorted questions from db', questions);
+        
         return questions;
       })
       .then(questions => {
-        console.log('B4. questions before sending sorted questions', questions);
+        
         io.to(question.room).emit('send-all-questions', questions);
       });
   });
 
   socket.on('vote', id => {
-    console.log('user added a vote ', id);
+    console.log('server vote')
 
     Questions.find({_id: id.id})
       .then(question => {
-        console.log('question: ', question[0].votes);
+        console.log('found vote')
         let votes = question[0].votes;
         votes = ++votes;
-        console.log('votes: ', votes);
+        
         question[0].votes = votes;
         question[0].save((error) => {
           if (error) {
@@ -69,13 +69,13 @@ io.on('connection', function(socket){
         return questions;
       })
       .then(questions => {
-        console.log('hit me!', questions);
+        console.log('emitting vote')
         io.to(id.room).emit('send-all-questions', questions);
       });
   });
 
   socket.on('create-room', room => {
-    console.log('user created/joined room');
+    
     socket.join(room);//
 
     Questions.find({room: room})

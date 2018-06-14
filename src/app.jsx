@@ -5,7 +5,7 @@ import io from 'socket.io-client';
 
 const socket = io('http://localhost:3000');
 socket.on('connect', () => {
-  console.log('client connected!');
+  
 })
 
 class App extends Component {
@@ -16,47 +16,48 @@ class App extends Component {
 
   componentDidMount() {
     socket.on('send-all-questions', data => {
-      console.log('A1. client got questions', data);
+      console.log('getting data')
       this.setState({data: data});
-      console.log('A2. inital state after load', this.state);
     })
   }
   
 
   sendQuestion = (ev) => {
-    console.log('sending this question', ev.target.question.value);
     ev.preventDefault();
     let newEntry = {
       text: ev.target.question.value, 
       votes: 0,
       room: this.state.room
     }
-    console.log('sending this question', ev.target.question.value);
+   
     ev.preventDefault();
     if(ev.target.question.value !== ''){
     socket.emit('send-question', newEntry);
     }
     ev.target.reset();
   };
+  
 
   createRoom = ev => {
     ev.preventDefault();
     let room = ev.target.room.value;
     this.setState({room: room});
     socket.emit('create-room', room);
-    console.log('joining room', room);
     ev.target.reset();
   };
   
   vote = (ev) => {
+    console.log('voting')
     ev.preventDefault();
     socket.emit('vote', {id: ev.target.id, room: this.state.room});
-    console.log('vote: ', ev.target.id);
+    
   };
+
+  
 
 
   render() {
-    console.log('R1. render questions', this.state.data);
+    
     return <Fragment>
       <h1>qLaunch</h1>
       
@@ -67,7 +68,7 @@ class App extends Component {
 
       <ul>
         {this.state.data.map((item, index) => {
-          console.log('R2. Current Items', item, index);
+          
           return <li key={index}>
           <span> {item.votes} votes </span>
           <span>{item.text}</span>
