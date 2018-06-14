@@ -54,6 +54,11 @@ class App extends React.Component {
     socket.emit('join-room', id);//is a string ID for the room
   };
 
+  leaveRoom = () => {
+    socket.emit('leave-room', this.state.roomID);
+    this.setState({roomID: null});
+  };
+
 
   render() {
     return <React.Fragment>
@@ -78,7 +83,7 @@ class App extends React.Component {
         </div>
       </div>
       }
-      {this.state.roomID !==null && <Room socket={socket} roomID={this.state.roomID} />}
+      {this.state.roomID !==null && <Room socket={socket} roomID={this.state.roomID} leaveRoom={this.leaveRoom}/>}
     </React.Fragment>
   }
 }

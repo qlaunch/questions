@@ -12,20 +12,7 @@ mongoose.connect('mongodb://localhost:27017/qlaunch');
 
 io.on('connection', function (socket) {
 
-  // Questions.find({})
-  //   .then(data => {
-  //     console.log('initial load', data);
-  //     data.sort((a, b) => {
-  //       return b.votes - a.votes;
-  //     });
-  //     console.log('sorted', data);
-  //     return data;
-  //   })
-  //   .then(data => {
-  //     socket.emit('send-all-questions', data);
-  //   });
-
-  socket.on('join-room', roomID => {//roomID = string which is the mongo ID
+  socket.on('join-room', (roomID) => {//roomID = string which is the mongo ID
     socket.join(roomID);//socket is joined
     console.log('joining room: ', roomID);
     Questions.find({ room: roomID })
@@ -44,8 +31,13 @@ io.on('connection', function (socket) {
       });
   });
 
+  socket.on('leave-room', (roomID) => {
+    socket.leave(roomID);
+    console.log('left room: ', roomID);
+  });
 
-  socket.on('send-question', question => {
+
+  socket.on('send-question', (question) => {
     console.log('B1. question received: ', question);
 
     Questions.create(question)
@@ -67,7 +59,7 @@ io.on('connection', function (socket) {
       });
   });
 
-  socket.on('vote', id => {
+  socket.on('vote', (id) => {
     console.log('user added a vote ', id);
 
     Questions.find({ _id: id.id })

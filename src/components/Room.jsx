@@ -1,12 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-
 import io from 'socket.io-client';
-
-// const socket = io('http://localhost:8000');
-// socket.on('connect', () => {
-//   console.log('client connected!');
-// });
 
 class Room extends React.Component {
  
@@ -21,6 +15,9 @@ class Room extends React.Component {
     });
   };
 
+  componentWillUnmount() {
+    this.props.socket.off('send-all-questions');
+  };
 
   sendQuestion = (ev) => {
     console.log('sending this question: ', ev.target.question.value);
@@ -45,6 +42,9 @@ class Room extends React.Component {
 render() {
   return (
     <React.Fragment>
+
+      <button onClick={this.props.leaveRoom}>LEAVE ROOM</button>
+
       <form onSubmit={this.sendQuestion} name="form">
         <input size="50" name="question" placeholder="Question..."/>
         <input type="submit" value="Send Question" />
