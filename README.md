@@ -19,9 +19,9 @@ npm install
 
 2. Run these to run the server
 ```
-node server.js
+node index.js
 // or
-nodemon server.js
+nodemon index.js
 ```
 
 The server will run in localhost:3000

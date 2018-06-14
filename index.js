@@ -32,7 +32,38 @@ io.on('connection', function(socket){
       });
   });
 
+  socket.on('vote', id => {
+    console.log('user added a vote ', id);
+
+    Questions.find({_id: id.id})
+      .then(question => {
+        console.log('question: ', question[0].votes);
+        let votes = question[0].votes;
+        votes = ++votes;
+        console.log('votes: ', votes);
+        question[0].votes = votes;
+        question[0].save((error) => {
+          if (error) {
+            console.error('error: ', error);
+          }
+        });
+      });
+    Questions.find({room: id.room})
+      .then(questions => {
+        
+        questions.sort((a, b) => {
+          return b.votes - a.votes;
+        });
+        return questions;
+      })
+      .then(questions => {
+        console.log('hit me!', questions);
+        io.to(id.room).emit('send-all-questions', questions);
+      });
+  });
+
   socket.on('create-room', room => {
+
     socket.join(room);
 
     Questions.find({room: room})
