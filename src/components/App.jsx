@@ -5,8 +5,9 @@ import io from 'socket.io-client';
 
 import Room from './Room.jsx';
 
-// const socket = io('http://localhost:8000');
-const socket = io('http://192.168.1.102:8000');
+const socket = io();
+// const socket = io('http://192.168.1.102:8000');
+// const socket = io('http://172.16.0.147:8000');
 socket.on('connect', () => {
   console.log('client connected!');
 })
