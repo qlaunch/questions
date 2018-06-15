@@ -63,6 +63,7 @@ class App extends Component {
     socket.emit('create-room', room);
     ev.target.reset();
     this.next(ev)
+    
   };
   
   vote = (ev) => {
@@ -74,12 +75,10 @@ class App extends Component {
 
   next(ev) {
     ev.preventDefault()
-    if(this.state === false){
-    this.setState({view: true})
-    }else{
-      this.setState({view: false})
-    }
-    this.reactSwipe.next();
+    // if(this.state.room !== null){
+    //   this.reactSwipe.next();
+    // }
+    this.reactSwipe.next()
   }
 
   prev(ev) {
@@ -111,7 +110,8 @@ class App extends Component {
                 <input size="50" name="room" placeholder="Room Name..."/>
                 <input type="submit" value="join/create" />
               </form>
-              <ul> List of Chat Rooms Available
+              <ul> There are currently {this.state.rooms.length} Events Open
+    
                 {this.state.rooms.map((room, index) => {
                   if(room !== this.state.room){
                   return <li key={index}>
@@ -121,7 +121,7 @@ class App extends Component {
                   }
                 })}
               </ul>
-            
+            <button type="button" onClick={::this.next}>Room</button>
           </div>
           <div data-index="1"> {this.state.room}
           
@@ -140,12 +140,14 @@ class App extends Component {
               <input size="50" name="question" placeholder="Question..."/>
               <input type="submit" value="Send Question" />
             </form>
+            <button type="button" onClick={::this.prev}>Lobby</button>
           </div>
-
+         
         
       </ReactSwipe>
-      <button type="button" onClick={::this.prev}>Lobby</button>
-      <button type="button" onClick={::this.next}>Room</button>
+    
+     
+      
     </Fragment>
   }
 }
