@@ -1,5 +1,3 @@
-require('dotenv').config();
-
 import React, {Component, Fragment} from 'react';
 import ReactDOM from 'react-dom';
 
@@ -91,9 +89,6 @@ class App extends Component {
 
   next(ev) {
     ev.preventDefault()
-    // if(this.state.room !== null){
-    //   this.reactSwipe.next();
-    // }
     this.reactSwipe.next()
   }
 
