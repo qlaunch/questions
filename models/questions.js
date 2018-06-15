@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 
 const QuestionSchema = new mongoose.Schema({
   text: String,
-  votes: Number,
+  votes: [],
   timestamp: {type: Date, default: Date.now},
   room: String
 });

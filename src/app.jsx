@@ -5,16 +5,21 @@ import io from 'socket.io-client';
 import ReactSwipe from 'react-swipe';
 
 const socket = io('http://localhost:3000');
+
+let socketId;
 socket.on('connect', () => {
-  console.log('room', socket)
+  console.log('session id', socket.id);
+  socketId = socket.id;
 })
+
 
 class App extends Component {
   state = {
     rooms: [],
     room: null,
     data: [],
-    view: true
+    view: true,
+    clientId: null,
   }
 
   componentDidMount() {
@@ -26,7 +31,11 @@ class App extends Component {
     });
     socket.on('send-all-questions', data => {
       console.log('getting data', data)
-      this.setState({data: data});
+      this.setState({
+        data: data,
+        clientId: socketId
+      });
+      console.log('initial state on component mount', this.state);
     })
     
   }
@@ -69,8 +78,11 @@ class App extends Component {
   vote = (ev) => {
     console.log('voting')
     ev.preventDefault();
-    socket.emit('vote', {id: ev.target.id, room: this.state.room});
-    
+    socket.emit('vote', {
+      id: ev.target.id,
+      room: this.state.room,
+      clientId: this.state.clientId
+    });
   };
 
   next(ev) {
@@ -129,9 +141,10 @@ class App extends Component {
               {this.state.data.map((item, index) => {
                 
                 return <li key={index}>
-                <span> {item.votes} votes </span>
+                <span> {item.votes.length} votes </span>
                 <span>{item.text}</span>
                 <span name='likes' id={item._id} onClick={this.vote}> Like </span>
+              {item.votes.indexOf(this.state.clientId) > -1 ? (<span>voted</span>) : (<span></span>)}
                 </li>
               })}
             </ul>
@@ -142,14 +155,9 @@ class App extends Component {
             </form>
             <button type="button" onClick={::this.prev}>Lobby</button>
           </div>
-         
-        
-      </ReactSwipe>
-    
-     
-      
+      </ReactSwipe> 
     </Fragment>
-  }
+  };
 }
 
 
