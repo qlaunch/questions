@@ -2,6 +2,9 @@
   "name": "questions",
   "description": "A live question polling application. Great for meetings, town halls... Anytime people want to ask questions.",
   "version": "1.0.0",
+  "engines": {
+    "node": "9.4.0",
+  },
   "main": "index.js",
   "devDependencies": {
     "babel-jest": "^23.0.1",
