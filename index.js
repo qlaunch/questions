@@ -9,7 +9,15 @@ const Questions = require('./models/questions.js');
 
 mongoose.connect('mongodb://localhost:27017/qlaunch');
 
+function reorderMessages(messages) {
+  messages.sort((a, b) => {
+    return b.votes - a.votes;
+  });
+  return messages;
+}
+
 io.on('connection', function(socket){
+
   socket.join('default')
   socket.leave(socket.id)
   socket.emit('rooms', Object.keys(io.sockets.adapter.rooms))
@@ -19,20 +27,19 @@ io.on('connection', function(socket){
   
   
   socket.on('send-question', question => {
+
+  
+  
+
+
     Questions.create(question)
       .then(() => {
         return Questions.find({room: question.room});
       })
       .then(questions => {
-        
-        questions.sort((a, b) => {
-          return b.votes - a.votes;
-        });
-        
-        return questions;
+        return reorderMessages(questions);
       })
       .then(questions => {
-        
         io.to(question.room).emit('send-all-questions', questions);
       });
       
@@ -69,15 +76,12 @@ io.on('connection', function(socket){
   });
 
   socket.on('create-room', room => {
-    
-    socket.join(room);//
+
+    socket.join(room);
 
     Questions.find({room: room})
       .then(questions => {
-        questions.sort((a, b) => {
-          return b.votes - a.votes;
-        });
-        return questions;
+        return reorderMessages(questions);
       })
       .then(questions => {
         socket.emit('send-all-questions', questions);

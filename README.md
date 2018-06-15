@@ -31,3 +31,7 @@ The server will run in localhost:3000
 ```
 npm run hot
 ```
+
+
+## Special Thanks
+* Tomasz Zwierzchon for the socket.io testing boilerplate: https://medium.com/@tozwierz/testing-socket-io-with-jest-on-backend-node-js-f71f7ec7010f
