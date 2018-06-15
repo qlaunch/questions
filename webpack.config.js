@@ -8,13 +8,9 @@ const config = {
   devServer: {
     headers: {'Access-Control-Allow-Origin': '*'}
   },
-  entry: `${__dirname}/src/app.jsx`,
-  output: {
-    path: `${__dirname}/public`,
-    filename: 'bundle.js'
-  },
+  entry: `${__dirname}/public/src/app.jsx`,
   plugins: [
-    new HtmlPlugin({ template: __dirname + '/src/index.html' })
+    new HtmlPlugin({ template: __dirname + '/public/index.html' })
   ],
   module: { 
     rules: [
