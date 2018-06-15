@@ -1,5 +1,7 @@
 'use strict';
 
+require('dotenv').config();
+
 const app = require('express')();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
@@ -7,7 +9,8 @@ const mongoose = require('mongoose');
 
 const Questions = require('./models/questions.js');
 
-mongoose.connect('mongodb://localhost:27017/qlaunch');
+// mongoose.connect('mongodb://localhost:27017/qlaunch');
+mongoose.connect(process.env.MONGODB_URI);
 
 function reorderMessages(messages) {
   messages.sort((a, b) => {
