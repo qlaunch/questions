@@ -4,8 +4,13 @@ require('dotenv').config();
 
 const path = require('path');
 const express = require('express');
-const app = express();
+const webpack  = require('webpack');
+const webpackMiddleware = require('webpack-dev-middleware');
+const webpackConfig = require('./webpack.config.js');
 const cors = require('cors');
+const app = express();
+app.use(webpackMiddleware(webpack(webpackConfig)));
+
 
 // const app = require('express')();
 const http = require('http').Server(app);
