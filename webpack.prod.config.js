@@ -1,7 +1,7 @@
 'use strict';
 
-var config = require('./webpack.config.js');
-var webpack = require('webpack');
+const config = require('./webpack.config.js');
+const webpack = require('webpack');
 
 config.plugins.push(
   new webpack.DefinePlugin({
@@ -12,7 +12,7 @@ config.plugins.push(
 );
 
 config.plugins.push(
-  new webpack.optimize.UglifyJsPlugin({
+  new webpack.optimization.minimize({
     compress: {
       warnings: false
     }
