@@ -2,6 +2,7 @@
 
 require('dotenv').config();
 
+const path = require('path');
 const express = require('express');
 const app = express();
 
@@ -109,7 +110,11 @@ io.on('connection', function(socket){
 
 });
 
-app.use(express.static('./public'));
+app.use(express.static(path.join(__dirname, './public')));
+
+app.get('/', (req, res, next) => {
+  res.sendFile(__dirname + './index.html');
+});
 
 http.listen(process.env.PORT, function(){
   console.log('listening on port process.env.PORT', process.env.PORT);
