@@ -17,8 +17,20 @@ function reorderMessages(messages) {
 }
 
 io.on('connection', function(socket){
+
+  socket.join('default')
+  socket.leave(socket.id)
+  socket.emit('rooms', Object.keys(io.sockets.adapter.rooms))
+  console.log('socket info', io.sockets.adapter.rooms)
+  console.log('trying to find rooms', Object.keys(io.sockets.adapter.rooms))
+
+  
   
   socket.on('send-question', question => {
+
+  
+  
+
 
     Questions.create(question)
       .then(() => {
@@ -30,6 +42,7 @@ io.on('connection', function(socket){
       .then(questions => {
         io.to(question.room).emit('send-all-questions', questions);
       });
+      
   });
 
   socket.on('vote', id => {
@@ -73,7 +86,24 @@ io.on('connection', function(socket){
       .then(questions => {
         socket.emit('send-all-questions', questions);
       });
+      io.emit('rooms', Object.keys(io.sockets.adapter.rooms))
   });
+
+  socket.on('join', data => {
+    socket.join(data.enter);
+    socket.leave(data.exit);
+    io.emit('rooms', Object.keys(io.sockets.adapter.rooms))
+    Questions.find({room: data.enter})
+      .then(questions => {
+        questions.sort((a, b) => {
+          return b.votes - a.votes;
+        });
+        return questions;
+      })
+      .then(questions => {
+        socket.emit('send-all-questions', questions);
+      });
+  })
 
 });
 

@@ -2,27 +2,46 @@ import React, {Component, Fragment} from 'react';
 import ReactDOM from 'react-dom';
 
 import io from 'socket.io-client';
+import ReactSwipe from 'react-swipe';
 
 const socket = io('http://localhost:3000');
 socket.on('connect', () => {
-  
+  console.log('room', socket)
 })
 
 class App extends Component {
   state = {
+    rooms: [],
     room: null,
-    data: []
+    data: [],
+    view: true
   }
 
   componentDidMount() {
+    
+    socket.on('rooms', data => {
+      console.log('data', data)
+      let rooms = data.filter(room => room !== 'default');
+      this.setState({rooms: rooms})
+      console.log(this.state)
+    });
     socket.on('send-all-questions', data => {
       console.log('getting data', data)
       this.setState({data: data});
     })
+    
   }
-  
-
+  getData = () => {
+  socket.on('rooms', data => {
+      console.log('data', data)
+      let rooms = data.filter(room => room !== 'default');
+      rooms.filter(room => room !== this.state.room)
+      this.setState({rooms: rooms})
+      console.log('the state', this.state)
+    });
+  }
   sendQuestion = (ev) => {
+
     ev.preventDefault();
     let newEntry = {
       text: ev.target.question.value, 
@@ -44,6 +63,8 @@ class App extends Component {
     this.setState({room: room});
     socket.emit('create-room', room);
     ev.target.reset();
+    this.next(ev)
+    
   };
   
   vote = (ev) => {
@@ -53,6 +74,30 @@ class App extends Component {
     
   };
 
+  next(ev) {
+    ev.preventDefault()
+    // if(this.state.room !== null){
+    //   this.reactSwipe.next();
+    // }
+    this.reactSwipe.next()
+  }
+
+  prev(ev) {
+    ev.preventDefault()
+    this.reactSwipe.prev();
+  }
+
+  join = ev => {
+    console.log('joining room', ev.target.id)
+    ev.preventDefault();
+    if(this.state.room === null){
+      socket.emit('join', {enter: ev.target.id, exit: 'default'})
+    }else {
+      socket.emit('join', {enter: ev.target.id, exit: this.state.room})
+    }
+    this.setState({room: ev.target.id})
+    this.next(ev)
+  }
   
 
 
@@ -60,27 +105,50 @@ class App extends Component {
     
     return <Fragment>
       <h1>qLaunch</h1>
-      
-      <form onSubmit={this.createRoom} name="form">
-        <input size="50" name="room" placeholder="Room Name..."/>
-        <input type="submit" value="join/create" />
-      </form>
-
-      <ul>
-        {this.state.data.map((item, index) => {
+        <ReactSwipe key={2} ref={reactSwipe => this.reactSwipe = reactSwipe} swipeOptions={{continuous: false}} className="mySwipe">
+          <div data-index="0"> Host an Event
+              <form onSubmit={this.createRoom} name="form">
+                <input size="50" name="room" placeholder="Room Name..."/>
+                <input type="submit" value="join/create" />
+              </form>
+              <ul> There are currently {this.state.rooms.length} Events Open
+    
+                {this.state.rooms.map((room, index) => {
+                  if(room !== 'default'){
+                  return <li key={index}>
+                    <span> {room} </span>
+                    <span name='room' id={room} onClick={this.join}> Join </span>
+                  </li>
+                  }
+                })}
+              </ul>
+            <button type="button" onClick={::this.next}>Room</button>
+          </div>
+          <div data-index="1"> {this.state.room}
           
-          return <li key={index}>
-          <span> {item.votes} votes </span>
-          <span>{item.text}</span>
-          <span name='likes' id={item._id} onClick={this.vote}> Like </span>
-          </li>
-        })}
-      </ul>
+            <ul>
+              {this.state.data.map((item, index) => {
+                
+                return <li key={index}>
+                <span> {item.votes} votes </span>
+                <span>{item.text}</span>
+                <span name='likes' id={item._id} onClick={this.vote}> Like </span>
+                </li>
+              })}
+            </ul>
 
-      <form onSubmit={this.sendQuestion} name="form">
-        <input size="50" name="question" placeholder="Question..."/>
-        <input type="submit" value="Send Question" />
-      </form>
+            <form onSubmit={this.sendQuestion} name="form">
+              <input size="50" name="question" placeholder="Question..."/>
+              <input type="submit" value="Send Question" />
+            </form>
+            <button type="button" onClick={::this.prev}>Lobby</button>
+          </div>
+         
+        
+      </ReactSwipe>
+    
+     
+      
     </Fragment>
   }
 }
