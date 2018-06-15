@@ -16,7 +16,8 @@
     "test": "jest",
     "hot": "webpack-dev-server --inline --hot --history-api-fallback --open",
     "build": "webpack --mode production",
-    "publish-demo": "npm run build"
+    "publish-demo": "npm run build",
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",
