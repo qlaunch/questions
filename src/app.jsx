@@ -23,6 +23,7 @@ class App extends Component {
   }
 
   componentDidMount() {
+    
     socket.on('rooms', data => {
       console.log('data', data)
       let rooms = data.filter(room => room !== 'default');
@@ -125,7 +126,7 @@ class App extends Component {
               <ul> There are currently {this.state.rooms.length} Events Open
     
                 {this.state.rooms.map((room, index) => {
-                  if(room !== this.state.room){
+                  if(room !== 'default'){
                   return <li key={index}>
                     <span> {room} </span>
                     <span name='room' id={room} onClick={this.join}> Join </span>
