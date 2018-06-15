@@ -5,6 +5,7 @@ require('dotenv').config();
 const path = require('path');
 const express = require('express');
 const app = express();
+const cors = require('cors');
 
 // const app = require('express')();
 const http = require('http').Server(app);
@@ -110,12 +111,14 @@ io.on('connection', function(socket){
 
 });
 
+app.use(cors());
+
 app.use(express.static(path.join(__dirname, './public')));
 
 app.get('/', (req, res, next) => {
   res.sendFile(__dirname + './index.html');
 });
 
-http.listen(process.env.PORT, function(){
+http.listen(process.env.PORT || 3000, function(){
   console.log('listening on port process.env.PORT', process.env.PORT);
 });
