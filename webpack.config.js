@@ -6,11 +6,13 @@ const config = {
   mode: 'development',
   devtool: 'source-map',
   devServer: {
+    contentBase: './dist',
+    hot: true,
     headers: {'Access-Control-Allow-Origin': '*'}
   },
-  entry: `${__dirname}/public/src/app.jsx`,
+  entry: `${__dirname}/src/app.jsx`,
   plugins: [
-    new HtmlPlugin({ template: __dirname + '/public/index.html' })
+    new HtmlPlugin({ template: __dirname + '/src/index.html' })
   ],
   module: { 
     rules: [

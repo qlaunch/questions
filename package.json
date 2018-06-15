@@ -5,7 +5,7 @@
   "engines": {
     "node": "9.4.0"
   },
-  "main": "dist/index.js",
+  "main": "index.js",
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-jest": "^23.0.1",
@@ -15,10 +15,11 @@
   },
   "scripts": {
     "test": "jest",
+    "start": "node index.js",
+    "postinstall": "webpack -p --config webpack.prod.config.js",
     "hot": "webpack-dev-server --inline --hot --history-api-fallback --open",
     "build": "webpack --mode production",
     "publish-demo": "npm run build",
-    "start": "node index.js",
     "transpile": "babel src -d public --copy-files"
   },
   "repository": {
