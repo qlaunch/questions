@@ -1,5 +1,5 @@
 {
-  "name": "questions",
+  "name": "qlaunch",
   "description": "A live question polling application. Great for meetings, town halls... Anytime people want to ask questions.",
   "version": "1.0.0",
   "engines": {
