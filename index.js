@@ -2,7 +2,10 @@
 
 require('dotenv').config();
 
-const app = require('express')();
+const express = require('express');
+const app = express();
+
+// const app = require('express')();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
 const mongoose = require('mongoose');
@@ -105,6 +108,8 @@ io.on('connection', function(socket){
   });
 
 });
+
+app.use(express.static('./public'));
 
 http.listen(process.env.PORT, function(){
   console.log('listening on port process.env.PORT', process.env.PORT);
