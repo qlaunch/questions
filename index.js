@@ -13,19 +13,10 @@ io.on('connection', function(socket){
   socket.join('default')
   socket.leave(socket.id)
   socket.emit('rooms', Object.keys(io.sockets.adapter.rooms))
+  console.log('socket info', io.sockets.adapter.rooms)
   console.log('trying to find rooms', Object.keys(io.sockets.adapter.rooms))
-  // Questions.find({})
-  //   .then(data => {
-  //     console.log('initial load', data);
-  //     data.sort((a, b) => {
-  //       return b.votes - a.votes;
-  //     });
-  //     console.log('sorted', data);
-  //     return data;
-  //   })
-  //   .then(data => {
-  //     socket.emit('send-all-questions', data);
-  //   });
+
+  
   
   socket.on('send-question', question => {
     Questions.create(question)
