@@ -1,10 +1,13 @@
+require('dotenv').config();
+
 import React, {Component, Fragment} from 'react';
 import ReactDOM from 'react-dom';
 
 import io from 'socket.io-client';
 import ReactSwipe from 'react-swipe';
 
-const socket = io('http://localhost:3000');
+// const socket = io('http://localhost:3000');
+const socket = io();
 
 let socketId;
 socket.on('connect', () => {
