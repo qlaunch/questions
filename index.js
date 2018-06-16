@@ -12,13 +12,12 @@ const app = express();
 
 // app.use(webpackMiddleware(webpack(webpackConfig)));
 
-// const app = require('express')();
-// const http = require('http').Server(app);
-// const io = require('socket.io')(http);
-// const mongoose = require('mongoose');
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
+const mongoose = require('mongoose');
 
-const server = require('http').createServer(app);
-const io = require('socket.io').listen(server);
+// const server = require('http').createServer(app);
+// const io = require('socket.io').listen(server);
 
 const Questions = require('./models/questions.js');
 
