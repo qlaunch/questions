@@ -18,7 +18,8 @@
   "scripts": {
     "test": "jest",
     "start": "node server.js",
-    "postinstall": "webpack -p --config webpack.prod.config.js"
+    "postinstall": "webpack -p --config webpack.prod.config.js",
+    "build": "webpack --mode production"
   },
   "repository": {
     "type": "git",
