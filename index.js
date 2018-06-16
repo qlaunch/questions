@@ -10,7 +10,7 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 
-app.use(webpackMiddleware(webpack(webpackConfig)));
+// app.use(webpackMiddleware(webpack(webpackConfig)));
 
 // const app = require('express')();
 // const http = require('http').Server(app);
