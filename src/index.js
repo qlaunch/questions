@@ -5,7 +5,7 @@ import io from 'socket.io-client';
 import ReactSwipe from 'react-swipe';
 
 // const socket = io('https://qlaunch.herokuapp.com/');
-const socket = window.io.connect('https://qlaunch.herokuapp.com', {transports: ['websocket']});
+const socket = io.connect('https://qlaunch.herokuapp.com', {transports: ['websocket']});
 
 let socketId;
 socket.on('connect', () => {
