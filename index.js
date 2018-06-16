@@ -10,6 +10,8 @@ const webpackConfig = require('./webpack.config.js');
 const cors = require('cors');
 const app = express();
 
+app.use(webpackMiddleware(webpack(webpackConfig)));
+
 // const app = require('express')();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
@@ -26,8 +28,6 @@ function reorderMessages(messages) {
   });
   return messages;
 }
-
-app.use(webpackMiddleware(webpack(webpackConfig)));
 
 app.use(cors());
 
