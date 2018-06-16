@@ -16,6 +16,9 @@ const io = require('socket.io').listen(server);
 
 app.use(cors());
 
+console.log('node env', process.env.NODE_ENV);
+console.log('port env'), process.env.PORT;
+
 if (process.env.NODE_ENV !== 'production') {
   const webpackDevMiddleware = require('webpack-dev-middleware');
   const webpackHotMiddleware = require('webpack-hot-middleware');
@@ -29,7 +32,6 @@ if (process.env.NODE_ENV !== 'production') {
 
 const Questions = require('./models/questions.js');
 
-// mongoose.connect('mongodb://localhost:27017/qlaunch');
 mongoose.connect(process.env.MONGODB_URI);
 
 function reorderMessages(messages) {

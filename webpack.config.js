@@ -3,8 +3,9 @@ var path = require('path');
 const htmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
+  devtool: 'source-map',
   entry: [
-    './src/index'
+    './src/index.js'
   ],
   module: {
     rules: [
