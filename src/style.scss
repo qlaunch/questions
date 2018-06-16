@@ -1,5 +1,6 @@
 body {
-  background-color: #D3D3D3;
+  // background-color: #D3D3D3;
+  background-image: url("http://blog.visme.co/wp-content/uploads/2017/07/50-Beautiful-and-Minimalist-Presentation-Backgrounds-08.jpg");
   text-align: center;
 }
 
@@ -10,6 +11,7 @@ body {
 
 #host {
   font-size: 500%;
+  font-family: 'Courier New', Courier, monospace;
 }
 
 #current {
@@ -17,20 +19,20 @@ body {
   font-family: 'Courier New', Courier, monospace;
 }
 
-#roomInput {
+#roomForm {
   font-family: 'Open Sans';
   font-size: 70%; 
   border: solid;
 }
 
-#createButton {
-  font-family: 'Courier New', Courier, monospace;
-  font-size: 200%;
-}
-
-#createInput {
+#roomInput {
   font-size: 200%;
   color: #007AB3;
+}
+
+#roomButton {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 200%;
 }
 
 #roomButton {
@@ -38,12 +40,36 @@ body {
 }
 
 #roomName {
+  color: #007AB3;
   font-family: 'Courier New', Courier, monospace;
   font-size: 150%;
 }
 
 #room {
   font-size: 150%;
+}
+
+#lobbyButton {
+  font-size: 150%;
+  // border-radius: 10%;
+  // background-color: #678E3D;
+}
+
+#questionInput {
+  font-size: 100%;
+  color: #007AB3;
+}
+
+#questionButton {
+  font-size: 100%;
+}
+
+.likeButton {
+  font-size: 100%;
+}
+
+#voted {
+  color: red;
 }
 
 #troll {

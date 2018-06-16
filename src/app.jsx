@@ -120,10 +120,10 @@ class App extends Component {
       <h1><img id="logo" src={require('../designs/qlaunch-logo.png')} /><img id="troll" src="http://i0.kym-cdn.com/photos/images/facebook/000/096/044/trollface.jpg" /></h1>
         <ReactSwipe key={2} ref={reactSwipe => this.reactSwipe = reactSwipe} swipeOptions={{continuous: false}} className="mySwipe">
           <div data-index="0">
-              <form id="roomInput" onSubmit={this.createRoom} name="form">
+              <form id="roomForm" onSubmit={this.createRoom} name="form">
               <div id="host">Host an Event</div>
-                <input id="createInput" size="50" name="room" placeholder="Room Name..."/>
-                <button id="createButton" type="submit">Create</button>
+                <input id="roomInput" size="50" name="room" placeholder="Room Name..."/>
+                <button id="roomButton" type="submit">Create</button>
               </form>
               <ul id="current"> There are currently {this.state.rooms.length} Events Open
     
@@ -136,27 +136,26 @@ class App extends Component {
                   }
                 })}
               </ul>
-            <button id="roomButton" type="button" onClick={::this.next}>Room</button>
+            <button id="roomButton" type="button" onClick={::this.next}> Room </button>
           </div>
           <div id ="roomName" data-index="1"> {this.state.room}
           
+              <form onSubmit={this.sendQuestion} name="form">
+                <input id="questionInput" size="50" name="question" placeholder="Question..."/>
+                <input id="questionButton" type="submit" value="Send Question" />
+              </form>
+              <button id="lobbyButton" type="button" onClick={::this.prev}>Lobby</button>
             <ul>
               {this.state.data.map((item, index) => {
-                
-                return <li key={index}>
+                return <div key={index}>
                 <span> {item.votes.length} votes </span>
-                <span>{item.text}</span>
-                <span name='likes' id={item._id} onClick={this.vote}> Like </span>
-              {item.votes.indexOf(this.state.clientId) > -1 ? (<span>voted</span>) : (<span></span>)}
-                </li>
+                <span> {item.text} </span>
+                <button className="likeButton" name='likes' id={item._id} onClick={this.vote}> Like </button>
+              {item.votes.indexOf(this.state.clientId) > -1 ? (<span id="voted"> voted </span>) : (<span></span>)}
+                </div>
               })}
             </ul>
 
-            <form onSubmit={this.sendQuestion} name="form">
-              <input size="50" name="question" placeholder="Question..."/>
-              <input type="submit" value="Send Question" />
-            </form>
-            <button type="button" onClick={::this.prev}>Lobby</button>
           </div>
       </ReactSwipe> 
     </Fragment>
