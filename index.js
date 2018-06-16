@@ -29,6 +29,10 @@ function reorderMessages(messages) {
   return messages;
 }
 
+app.use(cors());
+
+app.use(express.static(path.join(__dirname, './dist')));
+
 io.on('connection', function(socket){
 
   socket.join('default');
@@ -115,10 +119,6 @@ io.on('connection', function(socket){
   });
 
 });
-
-app.use(cors());
-
-app.use(express.static(path.join(__dirname, './dist')));
 
 // app.get('/', (req, res, next) => {
 //   res.sendFile(__dirname + './dist/index.html');
