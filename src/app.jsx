@@ -117,13 +117,13 @@ class App extends Component {
   render() {
     
     return <Fragment>
-      <h1><img id="logo" src={require('../designs/qlaunch-logo.png')} /><img id="troll" src="http://i0.kym-cdn.com/photos/images/facebook/000/096/044/trollface.jpg" /></h1>
+      <div><img id="logo" src={require('../designs/qlaunch-logo.png')} /><img id="troll" src="http://i0.kym-cdn.com/photos/images/facebook/000/096/044/trollface.jpg" /></div>
         <ReactSwipe key={2} ref={reactSwipe => this.reactSwipe = reactSwipe} swipeOptions={{continuous: false}} className="mySwipe">
           <div data-index="0">
               <form id="roomForm" onSubmit={this.createRoom} name="form">
               <div id="host">Host an Event</div>
                 <input id="roomInput" size="50" name="room" placeholder="Room Name..."/>
-                <button id="roomButton" type="submit">Create</button>
+                <button class="button" id="roomButton" type="submit"><span> Create </span></button>
               </form>
               <ul id="current"> There are currently {this.state.rooms.length} Events Open
     
@@ -131,7 +131,7 @@ class App extends Component {
                   if(room !== 'default'){
                   return <li key={index}>
                     <span id="room"> {room} </span>
-                    <span name='room' id={room} onClick={this.join}> Join </span>
+                    <button class="button" name='room' id={room} onClick={this.join}><span> Join </span></button>
                   </li>
                   }
                 })}
@@ -142,9 +142,9 @@ class App extends Component {
           
               <form onSubmit={this.sendQuestion} name="form">
                 <input id="questionInput" size="50" name="question" placeholder="Question..."/>
-                <input id="questionButton" type="submit" value="Send Question" />
+                <button id="questionButton" type="submit"> Add Question </button>
               </form>
-              <button id="lobbyButton" type="button" onClick={::this.prev}>Lobby</button>
+              <button id="lobbyButton" type="button" onClick={::this.prev}> Return to Lobby </button>
             <ul>
               {this.state.data.map((item, index) => {
                 return <div key={index}>
