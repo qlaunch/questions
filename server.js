@@ -5,13 +5,13 @@ require('dotenv').config();
 const path = require('path');
 const express = require('express');
 // const app = express();
-const PORT = process.env.PORT || 8080;
+// const PORT = process.env.PORT || 8080;
 // const server = require('http').createServer(app);
 // const io = require('socket.io').listen(server);
 const mongoose = require('mongoose');
-// const webpack  = require('webpack');
-// const webpackMiddleware = require('webpack-dev-middleware');
-// const webpackConfig = require('./webpack.config.js');
+const webpack  = require('webpack');
+const webpackMiddleware = require('webpack-dev-middleware');
+const webpackConfig = require('./webpack.config.js');
 // const cors = require('cors');
 
 const app = express();
@@ -33,13 +33,9 @@ if (process.env.NODE_ENV !== 'production') {
   const config = require('./webpack.config');
   const compiler = webpack(config);
 
-  // app.use(webpackDevMiddleware(compiler, { noInfo: true, publicPath: config.output.publicPath }));
-  // app.use(webpackHotMiddleware(compiler));
+  app.use(webpackDevMiddleware(compiler, { noInfo: true, publicPath: config.output.publicPath }));
+  app.use(webpackHotMiddleware(compiler));
 }
-
-
-
-
 
 const Questions = require('./models/questions.js');
 
@@ -65,10 +61,6 @@ server.listen(process.env.PORT || 3000, function(error){
     console.log('listening on port process.env.PORT', process.env.PORT);
   }
 });
-
-// app.use(cors());
-
-
 
 io.on('connection', function(socket){
   console.log('***** 1. inside io.on connection');
