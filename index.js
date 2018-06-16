@@ -37,7 +37,7 @@ app.use(cors());
 app.use(express.static(path.join(__dirname, './dist')));
 
 io.on('connection', function(socket){
-
+  console.log('***** 1. inside io.on connection');
   socket.join('default');
   socket.leave(socket.id);
   socket.emit('rooms', Object.keys(io.sockets.adapter.rooms));
