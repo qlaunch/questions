@@ -122,7 +122,7 @@ class App extends Component {
               <form id="roomInput" onSubmit={this.createRoom} name="form">
               <div id="host">Host an Event</div>
                 <input id="createInput" size="50" name="room" placeholder="Room Name..."/>
-                <input id="createButton" type="submit" value="join/create" />
+                <button id="createButton" type="submit">Create</button>
               </form>
               <ul id="current"> There are currently {this.state.rooms.length} Events Open
     

@@ -9,6 +9,7 @@ body {
 
 #current {
   font-size: 150%;
+  font-family: 'Courier New', Courier, monospace;
 }
 
 #roomInput {
@@ -19,14 +20,16 @@ body {
 
 #createButton {
   font-family: 'Courier New', Courier, monospace;
+  font-size: 200%;
 }
 
 #createInput {
+  font-size: 200%;
   color: #007AB3;
 }
 
 #roomButton {
-  font-size: 100%;
+  font-size: 200%;
 }
 
 #roomName {
@@ -39,3 +42,4 @@ body {
   width: 3%;
   border: solid;
 }
+
