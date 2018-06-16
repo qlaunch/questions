@@ -3,16 +3,23 @@
 require('dotenv').config();
 
 const path = require('path');
+const socketIO = require('socket.io');
 const express = require('express');
-const app = express();
+// const app = express();
 const PORT = process.env.PORT || 8080;
-const server = require('http').createServer(app);
-const io = require('socket.io').listen(server);
+// const server = require('http').createServer(app);
+// const io = require('socket.io').listen(server);
 const mongoose = require('mongoose');
 // const webpack  = require('webpack');
 // const webpackMiddleware = require('webpack-dev-middleware');
 // const webpackConfig = require('./webpack.config.js');
 // const cors = require('cors');
+
+const server = express()
+  .use(express.static(path.join(__dirname, './dist')))
+  .listen(PORT, () => console.log(`Listening on ${ PORT }`));
+
+const io = socketIO(server);
 
 
 // app.use(webpackMiddleware(webpack(webpackConfig)));
@@ -29,14 +36,14 @@ if (process.env.NODE_ENV !== 'production') {
   const config = require('./webpack.config');
   const compiler = webpack(config);
 
-  app.use(webpackDevMiddleware(compiler, { noInfo: true, publicPath: config.output.publicPath }));
-  app.use(webpackHotMiddleware(compiler));
+  // app.use(webpackDevMiddleware(compiler, { noInfo: true, publicPath: config.output.publicPath }));
+  // app.use(webpackHotMiddleware(compiler));
 }
 
-app.use(express.static(path.join(__dirname, './dist')));
-app.get('/', function(request, response) {
-  response.sendFile(__dirname + '/dist/index.html')
-});
+// app.use(express.static(path.join(__dirname, './dist')));
+// app.get('/', function(request, response) {
+//   response.sendFile(__dirname + '/dist/index.html')
+// });
 
 
 
@@ -147,10 +154,10 @@ io.on('connection', function(socket){
 //   res.sendFile(__dirname + './dist/index.html');
 // });
 
-server.listen(PORT || 3000, function(error){
-  if (error) {
-    console.error(error);
-  } else {
-    console.log('listening on port process.env.PORT', PORT);
-  }
-});
+// server.listen(PORT || 3000, function(error){
+//   if (error) {
+//     console.error(error);
+//   } else {
+//     console.log('listening on port process.env.PORT', PORT);
+//   }
+// });
