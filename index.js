@@ -4,18 +4,21 @@ require('dotenv').config();
 
 const path = require('path');
 const express = require('express');
-const webpack  = require('webpack');
-const webpackMiddleware = require('webpack-dev-middleware');
-const webpackConfig = require('./webpack.config.js');
+// const webpack  = require('webpack');
+// const webpackMiddleware = require('webpack-dev-middleware');
+// const webpackConfig = require('./webpack.config.js');
 const cors = require('cors');
 const app = express();
 
 app.use(webpackMiddleware(webpack(webpackConfig)));
 
 // const app = require('express')();
-const http = require('http').Server(app);
-const io = require('socket.io')(http);
-const mongoose = require('mongoose');
+// const http = require('http').Server(app);
+// const io = require('socket.io')(http);
+// const mongoose = require('mongoose');
+
+const server = require('http').createServer(app);
+const io = require('socket.io').listen(server);
 
 const Questions = require('./models/questions.js');
 
