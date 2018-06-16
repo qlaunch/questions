@@ -9,12 +9,4 @@ config.plugins.push(
   })
 );
 
-// config.plugins.push(
-//   new webpack.optimization.minimize({
-//     optimization: {
-//       minimize: true
-//     }
-//   })
-// );
-
 module.exports = config;
