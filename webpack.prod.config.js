@@ -11,8 +11,8 @@ config.plugins.push(
 
 config.plugins.push(
   new config.optimization.minimize({
-    compress: {
-      warnings: false
+    optimization: {
+      minimize: true
     }
   })
 );
