@@ -3,10 +3,11 @@ import ReactDOM from 'react-dom';
 
 import io from 'socket.io-client';
 import ReactSwipe from 'react-swipe';
+import './style.scss';
 
-// const socket = io('http://localhost:3000');
+const socket = io('http://localhost:3000');
 // const socket = io('https://qlaunch.herokuapp.com/');
-const socket = io();
+// const socket = io();
 
 let socketId;
 socket.on('connect', () => {
@@ -115,14 +116,15 @@ class App extends Component {
   render() {
     
     return <Fragment>
-      <h1>qLaunch</h1>
+      <h1><img src={require('../designs/qlaunch-logo.png')} /><img id="troll" src="http://i0.kym-cdn.com/photos/images/facebook/000/096/044/trollface.jpg" /></h1>
         <ReactSwipe key={2} ref={reactSwipe => this.reactSwipe = reactSwipe} swipeOptions={{continuous: false}} className="mySwipe">
-          <div data-index="0"> Host an Event
-              <form onSubmit={this.createRoom} name="form">
-                <input size="50" name="room" placeholder="Room Name..."/>
-                <input type="submit" value="join/create" />
+          <div data-index="0">
+              <form id="roomInput" onSubmit={this.createRoom} name="form">
+              <div id="host">Host an Event</div>
+                <input id="createInput" size="50" name="room" placeholder="Room Name..."/>
+                <input id="createButton" type="submit" value="join/create" />
               </form>
-              <ul> There are currently {this.state.rooms.length} Events Open
+              <ul id="current"> There are currently {this.state.rooms.length} Events Open
     
                 {this.state.rooms.map((room, index) => {
                   if(room !== 'default'){
@@ -133,9 +135,9 @@ class App extends Component {
                   }
                 })}
               </ul>
-            <button type="button" onClick={::this.next}>Room</button>
+            <button id="roomButton" type="button" onClick={::this.next}>Room</button>
           </div>
-          <div data-index="1"> {this.state.room}
+          <div id ="roomName" data-index="1"> {this.state.room}
           
             <ul>
               {this.state.data.map((item, index) => {
