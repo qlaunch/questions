@@ -120,9 +120,9 @@ app.use(cors());
 
 app.use(express.static(path.join(__dirname, './dist')));
 
-app.get('/', (req, res, next) => {
-  res.sendFile(__dirname + './dist/index.html');
-});
+// app.get('/', (req, res, next) => {
+//   res.sendFile(__dirname + './dist/index.html');
+// });
 
 http.listen(process.env.PORT || 3000, function(){
   console.log('listening on port process.env.PORT', process.env.PORT);
