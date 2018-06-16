@@ -39,7 +39,7 @@ function reorderMessages(messages) {
   return messages;
 }
 
-app.use(express.static(path.join(__dirname, './dist')));
+app.use(express.static(path.resolve(__dirname, './dist')));
 app.get('/', function(request, response) {
   response.sendFile(__dirname + '/dist/index.html')
 });
