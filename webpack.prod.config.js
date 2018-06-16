@@ -10,7 +10,7 @@ config.plugins.push(
 );
 
 config.plugins.push(
-  new config.optimization.minimize({
+  new webpack.optimization.minimize({
     optimization: {
       minimize: true
     }
