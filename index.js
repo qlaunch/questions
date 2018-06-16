@@ -9,8 +9,6 @@ const webpackMiddleware = require('webpack-dev-middleware');
 const webpackConfig = require('./webpack.config.js');
 const cors = require('cors');
 const app = express();
-app.use(webpackMiddleware(webpack(webpackConfig)));
-
 
 // const app = require('express')();
 const http = require('http').Server(app);
@@ -28,6 +26,8 @@ function reorderMessages(messages) {
   });
   return messages;
 }
+
+app.use(webpackMiddleware(webpack(webpackConfig)));
 
 app.use(cors());
 
