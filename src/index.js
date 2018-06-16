@@ -6,7 +6,7 @@ import ReactSwipe from 'react-swipe';
 
 // const socket = io('http://localhost:3000');
 // const socket = io('https://qlaunch.herokuapp.com/');
-const socket = io();
+const socket = io('https://qlaunch.herokuapp.com');
 
 let socketId;
 socket.on('connect', () => {
