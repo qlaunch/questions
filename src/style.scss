@@ -3,6 +3,11 @@ body {
   text-align: center;
 }
 
+#logo {
+  height: 30%;
+  width: 30%;
+}
+
 #host {
   font-size: 500%;
 }
@@ -34,6 +39,10 @@ body {
 
 #roomName {
   font-family: 'Courier New', Courier, monospace;
+  font-size: 150%;
+}
+
+#room {
   font-size: 150%;
 }
 

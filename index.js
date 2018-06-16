@@ -103,6 +103,7 @@ io.on('connection', function(socket){
   });
 
   socket.on('join', data => {
+    
     socket.join(data.enter);
     socket.leave(data.exit);
     io.emit('rooms', Object.keys(io.sockets.adapter.rooms));

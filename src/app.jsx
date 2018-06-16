@@ -104,7 +104,8 @@ class App extends Component {
     ev.preventDefault();
     if(this.state.room === null){
       socket.emit('join', {enter: ev.target.id, exit: 'default'})
-    }else {
+    }
+    else if(this.state.room !== ev.target.id){
       socket.emit('join', {enter: ev.target.id, exit: this.state.room})
     }
     this.setState({room: ev.target.id})
@@ -116,7 +117,7 @@ class App extends Component {
   render() {
     
     return <Fragment>
-      <h1><img src={require('../designs/qlaunch-logo.png')} /><img id="troll" src="http://i0.kym-cdn.com/photos/images/facebook/000/096/044/trollface.jpg" /></h1>
+      <h1><img id="logo" src={require('../designs/qlaunch-logo.png')} /><img id="troll" src="http://i0.kym-cdn.com/photos/images/facebook/000/096/044/trollface.jpg" /></h1>
         <ReactSwipe key={2} ref={reactSwipe => this.reactSwipe = reactSwipe} swipeOptions={{continuous: false}} className="mySwipe">
           <div data-index="0">
               <form id="roomInput" onSubmit={this.createRoom} name="form">
@@ -129,7 +130,7 @@ class App extends Component {
                 {this.state.rooms.map((room, index) => {
                   if(room !== 'default'){
                   return <li key={index}>
-                    <span> {room} </span>
+                    <span id="room"> {room} </span>
                     <span name='room' id={room} onClick={this.join}> Join </span>
                   </li>
                   }
