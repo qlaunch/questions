@@ -12,9 +12,16 @@ const app = express();
 
 // app.use(webpackMiddleware(webpack(webpackConfig)));
 
+
 const http = require('http').Server(app);
-const io = require('socket.io')(http);
+// const io = require('socket.io')(http);
 const mongoose = require('mongoose');
+
+
+const socketIO = require('socket.io');
+const server = app
+  .listen(process.env.PORT, () => console.log(`Listening on ${ process.env.PORT }`));
+  const io = socketIO(server);
 
 // const server = require('http').createServer(app);
 // const io = require('socket.io').listen(server);
@@ -126,6 +133,6 @@ io.on('connection', function(socket){
 //   res.sendFile(__dirname + './dist/index.html');
 // });
 
-http.listen(process.env.PORT || 3000, function(){
-  console.log('listening on port process.env.PORT', process.env.PORT);
-});
+// http.listen(process.env.PORT || 3000, function(){
+//   console.log('listening on port process.env.PORT', process.env.PORT);
+// });
