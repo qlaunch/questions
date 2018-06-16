@@ -4,11 +4,16 @@ require('dotenv').config();
 
 const path = require('path');
 const express = require('express');
+const app = express();
+const PORT = process.env.PORT || 8080;
+const server = require('http').createServer(app);
+const io = require('socket.io').listen(server);
+const mongoose = require('mongoose');
 // const webpack  = require('webpack');
 // const webpackMiddleware = require('webpack-dev-middleware');
 // const webpackConfig = require('./webpack.config.js');
-const cors = require('cors');
-const app = express();
+// const cors = require('cors');
+
 
 // app.use(webpackMiddleware(webpack(webpackConfig)));
 
@@ -17,8 +22,23 @@ const app = express();
 // const io = require('socket.io')(http);
 // const mongoose = require('mongoose');
 
-const server = require('http').createServer(app);
-const io = require('socket.io').listen(server);
+if (process.env.NODE_ENV !== 'production') {
+  const webpackDevMiddleware = require('webpack-dev-middleware');
+  const webpackHotMiddleware = require('webpack-hot-middleware');
+  const webpack = require('webpack');
+  const config = require('./webpack.config');
+  const compiler = webpack(config);
+
+  app.use(webpackDevMiddleware(compiler, { noInfo: true, publicPath: config.output.publicPath }));
+  app.use(webpackHotMiddleware(compiler));
+}
+
+app.use(express.static(path.join(__dirname, './dist')));
+app.get('/', function(request, response) {
+  response.sendFile(__dirname + '/dist/index.html')
+});
+
+
 
 const Questions = require('./models/questions.js');
 
@@ -32,9 +52,9 @@ function reorderMessages(messages) {
   return messages;
 }
 
-app.use(cors());
+// app.use(cors());
 
-app.use(express.static(path.join(__dirname, './dist')));
+
 
 io.on('connection', function(socket){
   console.log('***** 1. inside io.on connection');
@@ -127,6 +147,10 @@ io.on('connection', function(socket){
 //   res.sendFile(__dirname + './dist/index.html');
 // });
 
-http.listen(process.env.PORT || 3000, function(){
-  console.log('listening on port process.env.PORT', process.env.PORT);
+server.listen(PORT || 3000, function(error){
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('listening on port process.env.PORT', PORT);
+  }
 });

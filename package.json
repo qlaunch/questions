@@ -5,22 +5,20 @@
   "engines": {
     "node": "9.4.0"
   },
-  "main": "index.js",
+  "main": "server.js",
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-jest": "^23.0.1",
     "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
     "jest": "^23.1.0",
-    "webpack-dev-middleware": "^3.1.3"
+    "webpack-dev-middleware": "^3.1.3",
+    "webpack-hot-middleware": "^2.22.2"
   },
   "scripts": {
     "test": "jest",
-    "start": "node index.js",
-    "hot": "webpack-dev-server --inline --hot --history-api-fallback --open",
-    "build": "webpack --mode production",
-    "publish-demo": "npm run build",
-    "transpile": "babel src -d public --copy-files"
+    "start": "node server.js",
+    "postinstall": "webpack -p --config webpack.prod.config.js"
   },
   "repository": {
     "type": "git",
@@ -40,6 +38,7 @@
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
     "cors": "^2.8.4",
+    "css-loader": "^0.28.11",
     "dotenv": "^6.0.0",
     "express": "^4.16.3",
     "html-webpack-plugin": "^3.2.0",
@@ -47,8 +46,10 @@
     "react": "^16.4.0",
     "react-dom": "^16.4.0",
     "react-swipe": "^5.1.1",
+    "sass-loader": "^7.0.3",
     "socket.io": "^2.1.1",
     "socket.io-client": "^2.1.1",
+    "style-loader": "^0.21.0",
     "swipe-js-iso": "^2.0.4",
     "swiper": "^4.3.3",
     "webpack": "^4.12.0",

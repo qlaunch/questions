@@ -1,40 +1,37 @@
-'use strict';
+var webpack = require('webpack');
+var path = require('path');
+const htmlWebpackPlugin = require('html-webpack-plugin');
 
-const HtmlPlugin = require('html-webpack-plugin');
-
-const config = {
-  mode: 'development',
-  devtool: 'source-map',
+module.exports = {
+  entry: [
+    './src/index'
+  ],
+  module: {
+    rules: [
+      { test: /\.js?$/, loader: 'babel-loader', exclude: /node_modules/ },
+      { test: /\.s?css$/, loader: 'style!css!sass' },
+    ]
+  },
+  resolve: {
+    extensions: ['.js']
+  },
+  output: {
+    path: path.join(__dirname, '/dist'),
+    publicPath: '/',
+    filename: 'bundle.js'
+  },
   devServer: {
     contentBase: './dist',
-    hot: true,
-    headers: {'Access-Control-Allow-Origin': '*'}
+    hot: true
   },
-  entry: `${__dirname}/src/app.jsx`,
   plugins: [
-    new HtmlPlugin({ template: __dirname + '/src/index.html' })
-  ],
-  module: { 
-    rules: [
-      {
-        test: /\.jsx?$/, loader: ['babel-loader'], exclude: /node_modules/
-      },
-      {
-        test: /\.(scss|css)$/,
-        loader: ['style-loader', 'css-loader', 'sass-loader']
-      },
-      {
-        test: /\.(png|jp(e*)g|svg)$/,  
-        use: [{
-          loader: 'url-loader',
-          options: { 
-            limit: 8000, // Convert images < 8kb to base64 strings
-            name: 'images/[hash]-[name].[ext]'
-          } 
-        }]
-      }
-    ]
-  }
+    new htmlWebpackPlugin({
+      template: 'src/index.html',
+      inject: 'body',
+      filename: 'index.html'
+    }),
+    new webpack.optimize.OccurrenceOrderPlugin(),
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.NoEmitOnErrorsPlugin()
+  ]
 };
-
-module.exports = config;

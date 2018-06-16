@@ -15,13 +15,23 @@ socket.on('connect', () => {
 })
 
 
-class App extends Component {
-  state = {
-    rooms: [],
-    room: null,
-    data: [],
-    view: true,
-    clientId: null,
+class App extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      rooms: [],
+      room: null,
+      data: [],
+      view: true,
+      clientId: null,
+    }
+
+    this.getData = this.getData.bind(this);
+    this.sendQuestion = this.sendQuestion.bind(this);
+    this.createRoom = this.createRoom.bind(this);
+    this.vote = this.vote.bind(this);
+    this.next = this.next.bind(this);
+    this.prev = this.prev.bind(this);
   }
 
   componentDidMount() {
@@ -42,7 +52,7 @@ class App extends Component {
     })
     
   }
-  getData = () => {
+  getData() {
   socket.on('rooms', data => {
       console.log('data', data)
       let rooms = data.filter(room => room !== 'default');
@@ -51,7 +61,8 @@ class App extends Component {
       console.log('the state', this.state)
     });
   }
-  sendQuestion = (ev) => {
+
+  sendQuestion(ev) {
 
     ev.preventDefault();
     let newEntry = {
@@ -68,7 +79,7 @@ class App extends Component {
   };
   
 
-  createRoom = ev => {
+  createRoom(ev) {
     ev.preventDefault();
     let room = ev.target.room.value;
     this.setState({room: room});
@@ -78,7 +89,7 @@ class App extends Component {
     
   };
   
-  vote = (ev) => {
+  vote(ev) {
     console.log('voting')
     ev.preventDefault();
     socket.emit('vote', {
@@ -98,7 +109,7 @@ class App extends Component {
     this.reactSwipe.prev();
   }
 
-  join = ev => {
+  join(ev) {
     console.log('joining room', ev.target.id)
     ev.preventDefault();
     if(this.state.room === null){
@@ -133,7 +144,7 @@ class App extends Component {
                   }
                 })}
               </ul>
-            <button type="button" onClick={::this.next}>Room</button>
+            <button type="button" onClick={this.next}>Room</button>
           </div>
           <div data-index="1"> {this.state.room}
           
@@ -153,7 +164,7 @@ class App extends Component {
               <input size="50" name="question" placeholder="Question..."/>
               <input type="submit" value="Send Question" />
             </form>
-            <button type="button" onClick={::this.prev}>Lobby</button>
+            <button type="button" onClick={this.prev}>Lobby</button>
           </div>
       </ReactSwipe> 
     </Fragment>
