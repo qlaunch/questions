@@ -3,7 +3,6 @@
 require('dotenv').config();
 
 const path = require('path');
-const socketIO = require('socket.io');
 const express = require('express');
 // const app = express();
 const PORT = process.env.PORT || 8080;
@@ -15,11 +14,9 @@ const mongoose = require('mongoose');
 // const webpackConfig = require('./webpack.config.js');
 // const cors = require('cors');
 
-const server = express()
-  .use(express.static(path.join(__dirname, './dist')))
-  .listen(PORT, () => console.log(`Listening on ${ PORT }`));
-
-const io = socketIO(server);
+const app = express();
+const server = require('http').createServer(app);
+const io = require('socket.io').listen(server);
 
 
 // app.use(webpackMiddleware(webpack(webpackConfig)));
@@ -40,10 +37,7 @@ if (process.env.NODE_ENV !== 'production') {
   // app.use(webpackHotMiddleware(compiler));
 }
 
-// app.use(express.static(path.join(__dirname, './dist')));
-// app.get('/', function(request, response) {
-//   response.sendFile(__dirname + '/dist/index.html')
-// });
+
 
 
 
@@ -58,6 +52,19 @@ function reorderMessages(messages) {
   });
   return messages;
 }
+
+app.use(express.static(path.join(__dirname, './dist')));
+app.get('/', function(request, response) {
+  response.sendFile(__dirname + '/dist/index.html')
+});
+
+server.listen(process.env.PORT || 3000, function(error){
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('listening on port process.env.PORT', process.env.PORT);
+  }
+});
 
 // app.use(cors());
 
@@ -154,10 +161,3 @@ io.on('connection', function(socket){
 //   res.sendFile(__dirname + './dist/index.html');
 // });
 
-// server.listen(PORT || 3000, function(error){
-//   if (error) {
-//     console.error(error);
-//   } else {
-//     console.log('listening on port process.env.PORT', PORT);
-//   }
-// });
