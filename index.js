@@ -19,7 +19,7 @@ const mongoose = require('mongoose');
 
 const server = require('http').createServer(app);
 // const io = require('socket.io').listen(server);
-const i0 = require('socket.io')({
+const io = require('socket.io')({
   transports: ["xhr-polling"]
 })
 const Questions = require('./models/questions.js');
