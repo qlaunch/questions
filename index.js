@@ -22,6 +22,7 @@ const server = require('http').createServer(app);
 const io = require('socket.io')({
   transports: ["xhr-polling"]
 })
+io.listen(server);
 const Questions = require('./models/questions.js');
 
 // mongoose.connect('mongodb://localhost:27017/qlaunch');
