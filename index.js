@@ -15,7 +15,7 @@ const app = express();
 // const app = require('express')();
 // const http = require('http').Server(app);
 // const io = require('socket.io')(http);
-// const mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
 const server = require('http').createServer(app);
 const io = require('socket.io').listen(server);
