@@ -27,10 +27,10 @@ const Questions = require('./models/questions.js');
 // mongoose.connect('mongodb://localhost:27017/qlaunch');
 mongoose.connect(process.env.MONGODB_URI);
 
-io.configure(function(){
-  io.set("transports", ["xhr-polling"])
-  io.set("polling duration", 10)
-});
+// io.configure(function(){
+//   io.set("transports", ["xhr-polling"])
+//   io.set("polling duration", 10)
+// });
 function reorderMessages(messages) {
   messages.sort((a, b) => {
     return b.votes.length - a.votes.length;
