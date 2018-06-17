@@ -15,16 +15,23 @@ const app = express();
 // const app = require('express')();
 // const http = require('http').Server(app);
 // const io = require('socket.io')(http);
-// const mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
 const server = require('http').createServer(app);
-const io = require('socket.io').listen(server);
-
+// const io = require('socket.io').listen(server);
+const io = require('socket.io')({
+  transports: ["xhr-polling"]
+})
+io.listen(server);
 const Questions = require('./models/questions.js');
 
 // mongoose.connect('mongodb://localhost:27017/qlaunch');
 mongoose.connect(process.env.MONGODB_URI);
 
+// io.configure(function(){
+//   io.set("transports", ["xhr-polling"])
+//   io.set("polling duration", 10)
+// });
 function reorderMessages(messages) {
   messages.sort((a, b) => {
     return b.votes.length - a.votes.length;
@@ -127,6 +134,6 @@ io.on('connection', function(socket){
 //   res.sendFile(__dirname + './dist/index.html');
 // });
 
-http.listen(process.env.PORT || 3000, function(){
+server.listen(process.env.PORT || 3000, function(){
   console.log('listening on port process.env.PORT', process.env.PORT);
 });
