@@ -18,8 +18,10 @@ const app = express();
 const mongoose = require('mongoose');
 
 const server = require('http').createServer(app);
-const io = require('socket.io').listen(server);
-
+// const io = require('socket.io').listen(server);
+const i0 = require('socket.io')({
+  transports: ["xhr-polling"]
+})
 const Questions = require('./models/questions.js');
 
 // mongoose.connect('mongodb://localhost:27017/qlaunch');
