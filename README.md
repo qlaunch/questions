@@ -1,4 +1,4 @@
-# Questions by QLaunch
+# [Questions by QLaunch](https://qlaunch.herokuapp.com)
 A live question polling application. Great for meetings, town halls... Anytime people want to ask questions.
 
 ## Instructions
@@ -39,6 +39,13 @@ Upon creating a room or joining a room, you will be directed to that room.  Any 
 ![room view](question.png)
 
 You are allowed to vote once per question.  You can decide to "unvote" a question by simply clicking the vote button again.
+
+## The Creators
+Trevor Dobson: [LinkedIn](https://www.linkedin.com/in/trevorjdobson) || [GitHub](https://www.github.com/trevorjdobson)
+
+Amber Kim: [LinkedIn](https://www.linkedin.com/in/ambergkim) || [GitHub](https://www.github.com/ambergkim)
+
+Aaron Bruce: [GitHub](https://www.github.com/SilveredSliver)
 
 ## Special Thanks
 * Tomasz Zwierzchon for the socket.io testing boilerplate: https://medium.com/@tozwierz/testing-socket-io-with-jest-on-backend-node-js-f71f7ec7010f
