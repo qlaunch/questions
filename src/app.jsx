@@ -169,11 +169,18 @@ class App extends Component {
             <ul>
               {this.state.data.map((item, index) => {
                 
-                return <li key={index} className="question">
-                <span className="votes">{(item.votes.length - 1)}</span>
-                <span className="text">{item.text}</span>
-                {/* <span className="like" name='likes' id={item._id} onClick={this.vote}>⋆</span> */}
-              {item.votes.indexOf(this.state.clientId) > -1 ? (<span className="voted" name='likes' id={item._id} onClick={this.vote}>⋆</span>) : (<span className="unvoted" name='likes' id={item._id} onClick={this.vote}>⋆</span>)}
+                return <li key={index}>
+                
+                  {item.votes.indexOf(this.state.clientId) > -1 ?
+                    (<div className="question-group">
+                    <span className="votes voted">{(item.votes.length - 1)}</span>
+                    <span className="text">{item.text}</span>
+                    <span className="voted star" name='likes' id={item._id} onClick={this.vote}>⋆</span>
+                    </div>) :
+                    (<div className="question-group">
+                      <span className="votes">{(item.votes.length - 1)}</span>
+                    <span className="text">{item.text}</span>
+                    <span className="unvoted star" name='likes' id={item._id} onClick={this.vote}>⋆</span></div>)}
                 </li>
               })}
             </ul>

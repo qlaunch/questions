@@ -64,48 +64,50 @@ body {
     li {
       list-style: none;
       margin-bottom: 3%;
-    }
 
-    .question {
-      display: flex;
-      flex-wrap: nowrap;
-      flex-direction: row;
-
-      span {
+      .question-group {
         display: flex;
-        justify-content: center;
-        align-items: center;
+        flex-wrap: nowrap;
+        flex-direction: row;
+  
+        span {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+  
+        .votes, .unvoted, .voted {
+          width: 50px;
+          height: 50px;
+          line-height: 0.5;
+          border: solid 1px black;
+          color: white;
+          padding: 1%;
+        }
+  
+        .votes, .unvoted {
+          background-color: $box-color-regular;
+        }
+  
+        .star {
+          font-size: 80px;
+        }
+  
+        .text {
+          flex-grow: 2;
+          border: solid 1px black;
+          padding: 1% 3%;
+        }
+  
+        .voted {
+          background-color: $box-color-voted;
+          padding: 1%;
+        }
+  
       }
-
-      .votes, .unvoted, .voted {
-        width: 50px;
-        height: 50px;
-        line-height: 0.5;
-        border: solid 1px black;
-        color: white;
-        padding: 1%;
-      }
-
-      .votes, .unvoted {
-        background-color: $box-color-regular;
-      }
-
-      .voted, .unvoted {
-        font-size: 80px;
-      }
-
-      .text {
-        flex-grow: 2;
-        border: solid 1px black;
-        padding: 1% 3%;
-      }
-
-      .voted {
-        background-color: $box-color-voted;
-        padding: 1%;
-      }
-
     }
+
+    
   }
   
 
