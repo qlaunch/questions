@@ -32,11 +32,11 @@ npm run hot
 
 When you first arrive at the qLaunch app, you will see a form to create a room.  You will also see a list of available rooms to join.  Only rooms that currently have users in it are listed.
 
-![lobby view]  (question.png)
+![lobby view](question.png)
 
 Upon creating a room or joining a room, you will be directed to that room.  Any questions in that room will be displayed with their current votes.  The questions will be displayed in order of highest votes to lowest.
 
-![room view]  (question.png)
+![room view](question.png)
 
 You are allowed to vote once per question.  You can decide to "unvote" a question by simply clicking the vote button again.
 
