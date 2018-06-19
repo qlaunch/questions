@@ -4,9 +4,10 @@ import ReactDOM from 'react-dom';
 import io from 'socket.io-client';
 import ReactSwipe from 'react-swipe';
 
+import './styles/main.scss';
+
 // const socket = io('http://localhost:3000');
 const socket = io.connect();
-// const socket = io();
 
 let socketId;
 socket.on('connect', () => {
@@ -115,6 +116,14 @@ class App extends Component {
   render() {
     
     return <Fragment>
+      <header>
+          <img id="logo" src="./images/qlaunch-logo.png" alt="qlaunch logo"/>
+          {
+
+          }
+          <button type="button" onClick={this.next}>Room</button>
+          <button type="button" onClick={this.prev}>Lobby</button>
+      </header>
       <h1>qLaunch</h1>
         <ReactSwipe key={2} ref={reactSwipe => this.reactSwipe = reactSwipe} swipeOptions={{continuous: false}} className="mySwipe">
           <div data-index="0"> Host an Event
@@ -133,7 +142,6 @@ class App extends Component {
                   }
                 })}
               </ul>
-            <button type="button" onClick={::this.next}>Room</button>
           </div>
           <div data-index="1"> {this.state.room}
           
@@ -153,7 +161,6 @@ class App extends Component {
               <input size="50" name="question" placeholder="Question..."/>
               <input type="submit" value="Send Question" />
             </form>
-            <button type="button" onClick={::this.prev}>Lobby</button>
           </div>
       </ReactSwipe> 
     </Fragment>
