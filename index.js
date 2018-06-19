@@ -17,20 +17,21 @@ const http = require('http').Server(app);
 // const io = require('socket.io')(http);
 const mongoose = require('mongoose');
 
-
-const socketIO = require('socket.io');
-const server = app
-  .listen(process.env.PORT, () => console.log(`Listening on ${ process.env.PORT }`));
-  const io = socketIO(server);
-
-// const server = require('http').createServer(app);
+const server = require('http').createServer(app);
 // const io = require('socket.io').listen(server);
-
+const io = require('socket.io')({
+  transports: ["xhr-polling"]
+})
+io.listen(server);
 const Questions = require('./models/questions.js');
 
 // mongoose.connect('mongodb://localhost:27017/qlaunch');
 mongoose.connect(process.env.MONGODB_URI);
 
+// io.configure(function(){
+//   io.set("transports", ["xhr-polling"])
+//   io.set("polling duration", 10)
+// });
 function reorderMessages(messages) {
   messages.sort((a, b) => {
     return b.votes.length - a.votes.length;
@@ -133,6 +134,12 @@ io.on('connection', function(socket){
 //   res.sendFile(__dirname + './dist/index.html');
 // });
 
+<<<<<<< HEAD
 // http.listen(process.env.PORT || 3000, function(){
 //   console.log('listening on port process.env.PORT', process.env.PORT);
 // });
+=======
+server.listen(process.env.PORT || 3000, function(){
+  console.log('listening on port process.env.PORT', process.env.PORT);
+});
+>>>>>>> 2045552da02e154f0a0e36a3b79cb01d9ff23d2b
