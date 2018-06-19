@@ -51,7 +51,7 @@ io.on('connection', function(socket){
   console.log('trying to find rooms', Object.keys(io.sockets.adapter.rooms));
   
   socket.on('send-question', question => {
-
+console.log('QUESTION: ', question);
     Questions.create(question)
       .then(() => {
         return Questions.find({room: question.room});

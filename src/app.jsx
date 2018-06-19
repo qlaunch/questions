@@ -4,8 +4,8 @@ import ReactDOM from 'react-dom';
 import io from 'socket.io-client';
 import ReactSwipe from 'react-swipe';
 
-// const socket = io('http://localhost:3000');
-const socket = io.connect();
+const socket = io('http://localhost:3000');
+// const socket = io.connect();
 // const socket = io();
 
 let socketId;
@@ -103,7 +103,8 @@ class App extends Component {
     ev.preventDefault();
     if(this.state.room === null){
       socket.emit('join', {enter: ev.target.id, exit: 'default'})
-    }else {
+    }
+    if (this.state.room !== ev.target.id) {
       socket.emit('join', {enter: ev.target.id, exit: this.state.room})
     }
     this.setState({room: ev.target.id})
@@ -141,7 +142,7 @@ class App extends Component {
               {this.state.data.map((item, index) => {
                 
                 return <li key={index}>
-                <span> {item.votes.length} votes </span>
+                <span> {(item.votes.length - 1)} VOTES </span>
                 <span>{item.text}</span>
                 <span name='likes' id={item._id} onClick={this.vote}> Like </span>
               {item.votes.indexOf(this.state.clientId) > -1 ? (<span>voted</span>) : (<span></span>)}
