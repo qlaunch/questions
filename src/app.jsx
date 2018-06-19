@@ -117,22 +117,22 @@ class App extends Component {
   render() {
     
     return <Fragment>
-      <header>
-          <img id="logo" src="./images/qlaunch-logo.png" alt="qlaunch logo"/>
-          {
 
-          }
-          <button type="button" onClick={this.next}>Room</button>
-          <button type="button" onClick={this.prev}>Lobby</button>
-      </header>
-      <h1>qLaunch</h1>
         <ReactSwipe key={2} ref={reactSwipe => this.reactSwipe = reactSwipe} swipeOptions={{continuous: false}} className="mySwipe">
-          <div data-index="0"> Host an Event
+          <div data-index="0">
+          <header>
+              <img id="logo" src="./images/qlaunch-logo.png" alt="qlaunch logo"/>
+              <button className="room-toggle" type="button" onClick={this.next}>Room</button>
+          </header>
+
+            <h1>Lobby</h1>
+            <h3>Your current room: {this.state.room}</h3>
               <form onSubmit={this.createRoom} name="form">
-                <input size="50" name="room" placeholder="Room Name..."/>
+                <input size="50" name="room" placeholder="New Room Name..."/>
                 <input type="submit" value="join/create" />
               </form>
-              <ul> There are currently {this.state.rooms.length} Events Open
+              <h4>There are currently {this.state.rooms.length} Events Open</h4>
+              {/* <ul> 
     
                 {this.state.rooms.map((room, index) => {
                   if(room !== 'default'){
@@ -142,26 +142,41 @@ class App extends Component {
                   </li>
                   }
                 })}
-              </ul>
+              </ul> */}
+              <select name="room" onChange={this.join}>
+                <option value="default" name="room" disabled selected>
+                      Select a room -->
+                </option>
+                {this.state.rooms.map((room, index) => {
+                  if (room !== 'default') {
+                    return <option value={room} name="room">
+                      {room}
+                    </option>
+                  }
+                })}
+              </select>
           </div>
-          <div data-index="1"> {this.state.room}
-          
-            <ul>
-              {this.state.data.map((item, index) => {
-                
-                return <li key={index}>
-                <span> {(item.votes.length - 1)} VOTES </span>
-                <span>{item.text}</span>
-                <span name='likes' id={item._id} onClick={this.vote}> Like </span>
-              {item.votes.indexOf(this.state.clientId) > -1 ? (<span>voted</span>) : (<span></span>)}
-                </li>
-              })}
-            </ul>
-
+          <div data-index="1">
+          <header>
+              <img id="logo" src="./images/qlaunch-logo.png" alt="qlaunch logo"/>
+              <button className="room-toggle" type="button" onClick={this.prev}>Lobby</button>
+          </header>
+            <h1>{this.state.room}</h1>
             <form onSubmit={this.sendQuestion} name="form">
               <input size="50" name="question" placeholder="Question..."/>
               <input type="submit" value="Send Question" />
             </form>
+            <ul>
+              {this.state.data.map((item, index) => {
+                
+                return <li key={index} className="question">
+                <span className="votes">{(item.votes.length - 1)}</span>
+                <span className="text">{item.text}</span>
+                {/* <span className="like" name='likes' id={item._id} onClick={this.vote}>⋆</span> */}
+              {item.votes.indexOf(this.state.clientId) > -1 ? (<span className="voted" name='likes' id={item._id} onClick={this.vote}>⋆</span>) : (<span className="unvoted" name='likes' id={item._id} onClick={this.vote}>⋆</span>)}
+                </li>
+              })}
+            </ul>
           </div>
       </ReactSwipe> 
     </Fragment>
