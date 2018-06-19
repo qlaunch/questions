@@ -1,0 +1,30 @@
+@import url('https://fonts.googleapis.com/css?family=Dosis|Open+Sans');
+
+$heading-font: 'Dosis', sans-serif;
+$body-font: 'Open Sans', sans-serif;
+
+$main-background-color: #FDFFFE;
+$main-text-color: #051300;
+$box-color-regular: #678E3D;
+$box-color-voted: #007AB3;
+$cta-main: #F71D30;
+
+body {
+  background-color: $main-background-color;
+  color: $main-text-color;
+
+  header {
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    #logo {
+      width: 90px;
+      height: 35px;
+    }
+
+  }
+  
+}
+
