@@ -100,15 +100,16 @@ class App extends Component {
   }
 
   join = ev => {
-    console.log('joining room', ev.target.id)
+    console.log('joining room', ev.target.value)
     ev.preventDefault();
     if(this.state.room === null){
-      socket.emit('join', {enter: ev.target.id, exit: 'default'})
+      socket.emit('join', {enter: ev.target.value, exit: 'default'})
+      this.setState({room: ev.target.value})
     }
-    if (this.state.room !== ev.target.id) {
+    else if (this.state.room !== ev.target.value) {
       socket.emit('join', {enter: ev.target.id, exit: this.state.room})
+      this.setState({room: ev.target.value})
     }
-    this.setState({room: ev.target.id})
     this.next(ev)
   }
   
@@ -144,12 +145,12 @@ class App extends Component {
                 })}
               </ul> */}
               <select name="room" onChange={this.join}>
-                <option value="default" name="room" disabled selected>
+                <option  disabled selected>
                       Select a room -->
                 </option>
                 {this.state.rooms.map((room, index) => {
                   if (room !== 'default') {
-                    return <option value={room} name="room">
+                    return <option value={room} id={room} >
                       {room}
                     </option>
                   }
