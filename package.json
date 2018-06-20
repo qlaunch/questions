@@ -31,7 +31,7 @@
     "publish-demo": "npm run build",
     "transpile": "babel src -d public --copy-files",
     "watch": "npm-watch",
-    "heroku-postbuild": "webpack -p --config ./webpack.prod.config.js --progress"
+    "postbuild": "webpack --mode production"
   },
   "repository": {
     "type": "git",
