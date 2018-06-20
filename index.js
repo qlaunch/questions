@@ -102,8 +102,8 @@ console.log('QUESTION: ', question);
   });
 
   socket.on('join', data => {
-    socket.join(data.enter);
     socket.leave(data.exit);
+    socket.join(data.enter);
     io.emit('rooms', Object.keys(io.sockets.adapter.rooms));
     Questions.find({room: data.enter})
       .then(questions => {
