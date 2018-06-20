@@ -18,8 +18,8 @@ const io = require('socket.io')({
 io.listen(server);
 const Questions = require('./models/questions.js');
 
-mongoose.connect('mongodb://localhost:27017/qlaunch');
-// mongoose.connect(process.env.MONGODB_URI);
+// mongoose.connect('mongodb://localhost:27017/qlaunch');
+mongoose.connect(process.env.MONGODB_URI);
 
 function reorderMessages(messages) {
   messages.sort((a, b) => {
