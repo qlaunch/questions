@@ -24,7 +24,7 @@
     }
   },
   "scripts": {
-    "preinstall": "rm -rf /dist",
+    "heroku-prebuild": "rm -rf /dist",
     "test": "jest",
     "start": "node index.js",
     "hot": "npm run build && npm run start",
