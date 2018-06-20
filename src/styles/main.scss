@@ -10,12 +10,19 @@ $box-color-voted: #007AB3;
 $cta-main: #F71D30;
 $cta-main-text: #FDFFFE;
 
+$tablet-break: 750px;
+$desktop-break: 1000px;
+
 body {
   background-color: $main-background-color;
   color: $main-text-color;
-  padding: 5% 5%;
+  padding: 3% 5%;
   font-family: $body-font;
   text-align: center;
+
+  @media screen and (min-width: $tablet-break) {
+    padding: 1% 5%;
+  }
 
   header {
 
@@ -36,30 +43,76 @@ body {
     text-align: center;
   }
 
-  input {
-    border: solid 1px black;
-    padding: 5%;
-    width: 89%;
-    margin: 0 auto 3%;
+  .room-toggle {
+    border: none;
+    background-color: white;
   }
 
-  input[type="submit"] {
-    width: 100%;
-    background-color: $cta-main;
-    color: $cta-main-text;
-    font-size: 18px;
-    text-transform: uppercase;
+  form {
+    display: flex;
+    flex-direction: column;
+
+    input {
+      border: solid 1px black;
+      padding: 5%;
+      width: 89%;
+      margin: 0 auto 3%;
+  
+      @media screen and (min-width: $tablet-break) {
+        width: 50%;
+        padding: 1.5% 3%;
+      }
+
+      @media screen and (min-width: $desktop-break) {
+        width: 30%;
+        padding: 1%;
+        margin-bottom: 1%;
+      }
+    }
+
+    input[type="submit"] {
+      width: 100%;
+      background-color: $cta-main;
+      color: $cta-main-text;
+      font-size: 18px;
+      text-transform: uppercase;
+  
+      @media screen and (min-width: $tablet-break) {
+        width: 50%;
+        padding: 1.5% 3%;
+      }
+
+      @media screen and (min-width: $desktop-break) {
+        width: 30%;
+        padding: 1%;
+      }
+    }
   }
+
 
   select {
     border: solid 1px black;
     border-radius: 0;
     padding: 5%;
     width: 100%;
+
+    @media screen and (min-width: $tablet-break) {
+      width: 50%;
+      padding: 1.5% 3%;
+    }
   }
 
   ul {
     padding-left: 0;
+
+    @media screen and (min-width: $tablet-break) {
+      width: 50%;
+      margin: 0 auto;
+    }
+
+    @media screen and (min-width: $desktop-break) {
+      width: 30%;
+    }
 
     li {
       list-style: none;
