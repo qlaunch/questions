@@ -9,8 +9,8 @@ import ReactSwipe from 'react-swipe';
 import BadWords from 'bad-words';
 const filter = new BadWords();
 
+import './styles/normalize.css';
 import './styles/main.scss';
-
 import './img/qlaunch-logo.png';
 
 // const socket = io('http://localhost:3000');
