@@ -8,6 +8,8 @@ import ReactSwipe from 'react-swipe';
 
 import './styles/main.scss';
 
+import './img/qlaunch-logo.png';
+
 // const socket = io('http://localhost:3000');
 const socket = io.connect();
 
@@ -124,7 +126,7 @@ class App extends Component {
         <ReactSwipe key={2} ref={reactSwipe => this.reactSwipe = reactSwipe} swipeOptions={{continuous: false}} className="mySwipe">
           <div data-index="0">
           <header>
-              <img id="logo" src="./images/qlaunch-logo.png" alt="qlaunch logo"/>
+              <img id="logo" src="./img/qlaunch-logo.png" alt="qlaunch logo"/>
               <button className="room-toggle" type="button" onClick={this.next}>Room</button>
           </header>
 
@@ -161,7 +163,7 @@ class App extends Component {
           </div>
           <div data-index="1">
           <header>
-              <img id="logo" src="./images/qlaunch-logo.png" alt="qlaunch logo"/>
+              <img id="logo" src="./img/qlaunch-logo.png" alt="qlaunch logo"/>
               <button className="room-toggle" type="button" onClick={this.prev}>Lobby</button>
           </header>
             <h1>{this.state.room}</h1>
