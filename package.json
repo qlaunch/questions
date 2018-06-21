@@ -51,6 +51,7 @@
     "babel-plugin-autobind-class-methods": "^5.0.1",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
+    "bad-words": "^1.6.1",
     "cors": "^2.8.4",
     "css-loader": "^0.28.11",
     "dotenv": "^6.0.0",

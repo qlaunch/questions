@@ -6,6 +6,9 @@ import ReactDOM from 'react-dom';
 import io from 'socket.io-client';
 import ReactSwipe from 'react-swipe';
 
+import BadWords from 'bad-words';
+const filter = new BadWords();
+
 import './styles/main.scss';
 
 import './img/qlaunch-logo.png';
@@ -59,8 +62,9 @@ class App extends Component {
   sendQuestion = (ev) => {
 
     ev.preventDefault();
+    let question = filter.clean(ev.target.question.value);
     let newEntry = {
-      text: ev.target.question.value, 
+      text: question, 
       votes: 0,
       room: this.state.room
     }
